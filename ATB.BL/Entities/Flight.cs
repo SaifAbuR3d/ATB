@@ -1,6 +1,6 @@
 ﻿namespace ATB.Entities
 {
-    enum FlightClass
+    internal enum FlightClass
     {
         Economy,
         Business,
@@ -8,14 +8,17 @@
     }
     internal readonly struct Flight
     {
-        public decimal Price { get; }
-        public string DepartureCounrty { get; }
-        public string DestinationCountry { get; }
-        public DateOnly DepartureDate { get; }
-        public string DepartureAirport { get; }
-        public string ArrivalAirport { get; }
+        private static int lastId = 1;
+        public int FlightId { get; }
+        public decimal Price { get; init; }
+        public string DepartureCounrty { get; init; }
+        public string DestinationCountry { get; init; }
+        public DateOnly DepartureDate { get; init; }
+        public string DepartureAirport { get; init; }
+        public string ArrivalAirport { get; init; }
+        public FlightClass FClass { get; init; }
 
-        public Flight(decimal price, string departureCounrty, string destinationCountry, DateOnly departureDate, string departureAirport, string arrivalAirport)
+        public Flight(decimal price, string departureCounrty, string destinationCountry, DateOnly departureDate, string departureAirport, string arrivalAirport, FlightClass fClass)
         {
             Price = price;
             DepartureCounrty = departureCounrty ?? throw new ArgumentNullException(nameof(departureCounrty));
@@ -23,6 +26,14 @@
             DepartureDate = departureDate;
             DepartureAirport = departureAirport ?? throw new ArgumentNullException(nameof(departureAirport));
             ArrivalAirport = arrivalAirport ?? throw new ArgumentNullException(nameof(arrivalAirport));
+            FClass = fClass;
+
+            FlightId = GenerateId(); 
+        }
+        static int GenerateId() => lastId++;
+        public override string ToString()
+        {
+            return $"ID = {FlightId}, Price = {Price}, DepartureCountry = {DepartureCounrty}";
         }
     }
 }
