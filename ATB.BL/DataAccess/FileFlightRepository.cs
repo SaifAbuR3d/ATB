@@ -1,17 +1,23 @@
 ﻿using ATB.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ATB.DataAccess
 {
     internal class FileFlightRepository : IFlightRepository
     {
+        private string flightsFilePath = "files/Flights.csv";
+        private Dictionary<int, Flight> flightDictionary; // Dictionary to store flights
+
+        public FileFlightRepository()
+        {
+            InitializeFlightDictionary();
+        }
+
         public void AddAllFlights(IEnumerable<Flight> flights)
         {
-            throw new NotImplementedException();
+
+            CsvUtility.WriteFlightsToCsv(flightsFilePath, flights);
+
         }
 
         public void AddFlight(Flight flight)
@@ -21,65 +27,53 @@ namespace ATB.DataAccess
 
         public IEnumerable<Flight> GetAllFlights()
         {
-            // Hard-Coded List, for Testing purposes 
-            return new List<Flight>()
-            {
-                new Flight
-                {
-                    Price = 1,
-                    ArrivalAirport = "A",
-                    DepartureAirport = "B",
-                    DepartureCounrty = "A",
-                    DepartureDate =DateOnly.Parse("1/1/2001"),
-                    DestinationCountry = "A",
-                    FClass = FlightClass.FirstClass,
-                },
-                new Flight
-                {
-                    Price = 1,
-                    ArrivalAirport = "AA",
-                    DepartureAirport = "Bd",
-                    DepartureCounrty = "Ad",
-                    DepartureDate =DateOnly.Parse("11/1/2001"),
-                    DestinationCountry = "Ac",
-                    FClass = FlightClass.Economy
-                },
-                new Flight
-                {
-                    Price = 1,
-                    ArrivalAirport = "AA",
-                    DepartureAirport = "BA",
-                    DepartureCounrty = "AA",
-                    DepartureDate =DateOnly.Parse("1/1/2561"),
-                    DestinationCountry = "AA",
-                    FClass = FlightClass.Business
-                },
-                new Flight
-                {
-                    Price = 145,
-                    ArrivalAirport = "Ab",
-                    DepartureAirport = "bB",
-                    DepartureCounrty = "bA",
-                    DepartureDate =DateOnly.Parse("1/15/2061"),
-                    DestinationCountry = "A",
-                    FClass = FlightClass.FirstClass
-                },
-                new Flight
-                {
-                    Price = 121,
-                    ArrivalAirport = "AA",
-                    DepartureAirport = "B",
-                    DepartureCounrty = "AA",
-                    DepartureDate =DateOnly.Parse("1/1/2521"),
-                    DestinationCountry = "AA",
-                    FClass = FlightClass.FirstClass
-                },
-            };
+            return CsvUtility.ParseFlightsFromCsv(flightsFilePath);
         }
 
-        public Flight GetFlightById(int flightId)
+        public Flight? GetFlightById(int flightId) // TODO : if the key is not presented ?
         {
-            throw new NotImplementedException();
+            return flightDictionary[flightId];
+        }
+        private void InitializeFlightDictionary()
+        {
+            flightDictionary = new Dictionary<int, Flight>();
+
+            try
+            {
+                string[] lines = File.ReadAllLines(flightsFilePath);
+
+                foreach (string line in lines)
+                {
+                    string[] values = line.Split(',');
+
+                    if (values.Length >= 8 && int.TryParse(values[0], out int id))
+                    {
+                        decimal price = decimal.Parse(values[1]);
+                        string departureCountry = values[2];
+                        string destinationCountry = values[3];
+                        DateOnly departureDate = DateOnly.Parse(values[4]);
+                        string departureAirport = values[5];
+                        string arrivalAirport = values[6];
+                        FlightClass fClass = Enum.Parse<FlightClass>(values[7]);
+
+                        flightDictionary[id] = new Flight
+                        {
+                            FlightId = id,
+                            Price = price,
+                            DepartureCountry = departureCountry,
+                            DestinationCountry = destinationCountry,
+                            DepartureDate = departureDate,
+                            DepartureAirport = departureAirport,
+                            ArrivalAirport = arrivalAirport,
+                            FClass = fClass
+                        };
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while reading flights from the file: {ex.Message}");
+            }
         }
     }
 }

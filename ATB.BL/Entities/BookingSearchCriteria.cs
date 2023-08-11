@@ -1,7 +1,9 @@
 ﻿namespace ATB.Entities
 {
-    internal class FlightSearchCriteria
+    internal class BookingSearchCriteria
     {
+        public Flight? flight { get; set; }
+        public Passenger? passenger { get; set; }
         public decimal? Price { get; set; }
         public string? DepartureCountry { get; set; }
         public string? DestinationCountry { get; set; }
@@ -10,6 +12,5 @@
         public string? ArrivalAirport { get; set; }
         public FlightClass? FClass { get; set; }
 
-        
     }
 }

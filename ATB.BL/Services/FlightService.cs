@@ -1,6 +1,6 @@
 ﻿using ATB.DataAccess;
 using ATB.Entities;
-using System.Xml.Serialization;
+using CsvHelper;
 
 namespace ATB.Services
 {
@@ -16,11 +16,11 @@ namespace ATB.Services
             return _flightRepository.GetAllFlights();
         }
 
-        public bool DontCare(Object? obj)
+        public static bool DontCare(object? obj)
         {
             return obj is null;
         }
-        public IEnumerable<Flight> FilterFlights(FlightSearchCriteria flightSearchCriteria) 
+        public IEnumerable<Flight> FilterFlights(FlightSearchCriteria flightSearchCriteria)
         { 
             var allFlights = GetAllFlights();
             return allFlights
@@ -30,9 +30,22 @@ namespace ATB.Services
                          ((flight.FClass.Equals(flightSearchCriteria.FClass)) || DontCare(flightSearchCriteria.FClass)) &&
                          ((flight.DestinationCountry.Equals(flightSearchCriteria.DestinationCountry)) || DontCare(flightSearchCriteria.DestinationCountry)) &&
                          ((flight.ArrivalAirport.Equals(flightSearchCriteria.ArrivalAirport)) || DontCare(flightSearchCriteria.ArrivalAirport)) &&
-                         ((flight.DepartureCounrty.Equals(flightSearchCriteria.DepartureCounrty)) || DontCare(flightSearchCriteria.DepartureCounrty)) &&
+                         ((flight.DepartureCountry.Equals(flightSearchCriteria.DepartureCountry)) || DontCare(flightSearchCriteria.DepartureCountry)) &&
                          ((flight.DepartureAirport.Equals(flightSearchCriteria.DepartureAirport)) || DontCare(flightSearchCriteria.DepartureAirport))
                          ); 
         }
+
+        public void ImportFlightsFromCsv(string csvFilePath)
+        {
+            List<Flight> flights = CsvUtility.ParseFlightsFromCsv(csvFilePath).ToList();
+            _flightRepository.AddAllFlights(flights);
+        }
+
+        public Flight? GetFlightById(int flightId)
+        {
+            return _flightRepository.GetFlightById(flightId);
+        }
+
+
     }
 }
