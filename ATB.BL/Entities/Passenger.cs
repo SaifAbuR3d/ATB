@@ -4,13 +4,12 @@
     {
       public int PassengerId { get; set; }
       public string PassengerName { get; set; }
-      public IEnumerable<Booking> Bookings { get; set; }
+      //public IEnumerable<Booking> Bookings { get; set; }
 
         public Passenger(int passengerId, string passengerName)
         {
             PassengerId = passengerId;
             PassengerName = passengerName;
-            Bookings = new HashSet<Booking>();
         }
 
         public override string ToString()

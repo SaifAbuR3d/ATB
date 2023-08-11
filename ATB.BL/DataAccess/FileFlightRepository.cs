@@ -6,7 +6,7 @@ namespace ATB.DataAccess
     internal class FileFlightRepository : IFlightRepository
     {
         private string flightsFilePath = "files/Flights.csv";
-        private Dictionary<int, Flight> flightDictionary; // Dictionary to store flights
+        private Dictionary<int, Flight> flightDictionary;
 
         public FileFlightRepository()
         {
@@ -30,7 +30,7 @@ namespace ATB.DataAccess
             return CsvUtility.ParseFlightsFromCsv(flightsFilePath);
         }
 
-        public Flight? GetFlightById(int flightId) // TODO : if the key is not presented ?
+        public Flight GetFlightById(int flightId) // TODO : if the key is not here ?
         {
             return flightDictionary[flightId];
         }

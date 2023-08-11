@@ -10,7 +10,6 @@ namespace ATB.DataAccess
         void RemoveBooking(Booking booking);
         void RemoveBooking(Passenger passenger, Flight flight);
         IEnumerable<Booking> GetPassengerBookings(Passenger passenger);
-
         IEnumerable<Booking> GetAllBookings();
 
     }

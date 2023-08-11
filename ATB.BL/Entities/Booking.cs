@@ -7,10 +7,10 @@ namespace ATB.Entities
         public Passenger passenger { get; set; }
         public Flight flight { get; set; }
         public  DateTime ReservationDate { get; } = DateTime.Now;
-        public Booking(Flight? _flight, Passenger? _passenger )
+        public Booking(Flight _flight, Passenger _passenger )
         {
-            flight = _flight ?? throw new ArgumentNullException( nameof( _flight ) );
-            passenger = _passenger ?? throw new ArgumentNullException(nameof(_passenger));
+            flight = _flight;
+            passenger = _passenger;
         }
 
         public override string ToString()

@@ -21,6 +21,8 @@ namespace ATB.DataAccess
             IFlightRepository flightRepository = new FileFlightRepository();
             FlightService flightService = new FlightService(flightRepository);
 
+            FilePassengerRepository passengerRepository = new FilePassengerRepository();
+
             List<Booking> allBookings = new List<Booking>();
 
             try
@@ -34,10 +36,10 @@ namespace ATB.DataAccess
                     if (values.Length >= 2 && int.TryParse(values[0], out int passengerId))
                     {
                         int flightId = int.Parse(values[1]);
-                        Flight flight = (Flight)flightService.GetFlightById(flightId); 
-
-                        // Continue Here .... TODO make getById for passengers ...
-                       
+                        Flight flight = flightService.GetFlightById(flightId); 
+                        Passenger passenger = passengerRepository.GetPassengerById(passengerId);
+                        
+                        allBookings.Add(new Booking(flight, passenger));
                     }
                 }
             }
