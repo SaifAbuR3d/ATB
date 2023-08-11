@@ -15,12 +15,17 @@ namespace ATB.Presentation
             FlightService flightService = new FlightService(flightRepository);
 
             IBookingRepository bookingRepository = new FileBookingRepository(); 
-            BookingService bookingService = new BookingService(bookingRepository);  
+            BookingService bookingService = new BookingService(bookingRepository);
+            
+            FilePassengerRepository passengerRepository = new FilePassengerRepository();
 
-            var list = bookingRepository.GetPassengerBookings(3); 
+            var list = bookingService.GetPassengerBookings(2); 
             foreach (Booking item in list) { Console.WriteLine(item); }
 
-
+            bookingService.AddBooking(passengerRepository.GetPassengerById(2), flightService.GetFlightById(3));
+            Console.WriteLine();
+            list = bookingService.GetPassengerBookings(2);
+            foreach (Booking item in list) { Console.WriteLine(item); }
             //  flightService.ImportFlightsFromCsv("files/AddFlights.csv");
 
             //List<Flight> list = flightService.GetAllFlights().Take(6).ToList();

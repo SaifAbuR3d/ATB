@@ -12,7 +12,7 @@ namespace ATB.Services
             _bookingRepository = bookingRepository;
         }
 
-        public IEnumerable<Booking> GetAllBookings() 
+        public IEnumerable<Booking> GetAllBookings()
         {
             return _bookingRepository.GetAllBookings();
         }
@@ -20,7 +20,7 @@ namespace ATB.Services
         {
             return obj is null;
         }
-        public IEnumerable<Booking> FilterBookings(BookingSearchCriteria bookingSearchCriteria) 
+        public IEnumerable<Booking> FilterBookings(BookingSearchCriteria bookingSearchCriteria)
         {
             var allBookings = GetAllBookings();
             return allBookings
@@ -36,5 +36,27 @@ namespace ATB.Services
                      (booking.passenger.Equals(bookingSearchCriteria.passenger) || DontCare(bookingSearchCriteria.passenger))
                      );
         }
+        public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)
+        {
+            return _bookingRepository.GetPassengerBookings(passenger);
+
+        }
+        public IEnumerable<Booking> GetPassengerBookings(int passengerId)
+        {
+            return _bookingRepository.GetPassengerBookings(passengerId);
+
+        }
+
+        // TODO - Add checks if the passenger has already booked this flight.
+        public void AddBooking(Passenger passenger, Flight flight)
+        {
+            _bookingRepository.AddBooking(new Booking(flight, passenger)); 
+        }
+
+        public void AddBooking(Booking booking)
+        {
+            _bookingRepository.AddBooking(booking);
+        }
+
     }
 }

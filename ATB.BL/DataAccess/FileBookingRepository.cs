@@ -6,12 +6,21 @@ namespace ATB.DataAccess
     internal class FileBookingRepository : IBookingRepository
     {
         private string bookingsFilePath = "files/Bookings.txt";
-        public void AddBooking(Passenger passenger, Flight flight)
+        public void AddBooking(Booking booking)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string bookingLine = $"{booking.passenger.PassengerId},{booking.flight.FlightId}";
+                File.AppendAllLines(bookingsFilePath, new[] { bookingLine });
+                Console.WriteLine("Booking added successfully!");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while adding the booking: {ex.Message}");
+            }
         }
 
-        public void AddBooking(Booking booking)
+        public void AddBooking(Passenger passenger, Flight flight)
         {
             throw new NotImplementedException();
         }
@@ -50,8 +59,6 @@ namespace ATB.DataAccess
 
             return allBookings;
         }
-
-        // TODO - move below two methods to Services.
         public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)
         {
             return GetAllBookings().
