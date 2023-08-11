@@ -17,9 +17,8 @@ namespace ATB.Presentation
             IBookingRepository bookingRepository = new FileBookingRepository(); 
             BookingService bookingService = new BookingService(bookingRepository);  
 
-            List<Booking> bookings = bookingService.GetAllBookings().ToList();
-
-            foreach (Booking booking in bookings) { Console.WriteLine(booking); }
+            var list = bookingRepository.GetPassengerBookings(3); 
+            foreach (Booking item in list) { Console.WriteLine(item); }
 
 
             //  flightService.ImportFlightsFromCsv("files/AddFlights.csv");

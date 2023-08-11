@@ -51,11 +51,19 @@ namespace ATB.DataAccess
             return allBookings;
         }
 
+        // TODO - move below two methods to Services.
         public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)
         {
             return GetAllBookings().
                 Where(booking => booking.passenger.Equals(passenger)); 
         }
+
+        public IEnumerable<Booking> GetPassengerBookings(int passengerId)
+        {
+            return GetAllBookings().
+                Where(booking => booking.passenger.PassengerId.Equals(passengerId));
+        }
+
 
         public void RemoveBooking(Booking booking)
         {
