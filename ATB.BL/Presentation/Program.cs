@@ -1,9 +1,12 @@
 ﻿using ATB.DataAccess;
 using ATB.Entities;
+using ATB.Helpers;
 using ATB.Services;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Reflection;
 
 namespace ATB.Presentation
 {
@@ -11,28 +14,29 @@ namespace ATB.Presentation
     {
         static void Main()
         {
-            IFlightRepository flightRepository = new FileFlightRepository();
-            FlightService flightService = new FlightService(flightRepository);
+            ValidationDetailsHelper.DisplayValidationDetails(typeof(Flight)); 
+            //IFlightRepository flightRepository = new FileFlightRepository();
+            //FlightService flightService = new FlightService(flightRepository);
 
-            IBookingRepository bookingRepository = new FileBookingRepository(); 
-            BookingService bookingService = new BookingService(bookingRepository);
+            //IBookingRepository bookingRepository = new FileBookingRepository(); 
+            //BookingService bookingService = new BookingService(bookingRepository);
             
-            FilePassengerRepository passengerRepository = new FilePassengerRepository();
+            //FilePassengerRepository passengerRepository = new FilePassengerRepository();
 
-            foreach (var flight in flightService.GetAllFlights())
-            {
-                Console.WriteLine(flight);
-            }
+            //foreach (var flight in flightService.GetAllFlights())
+            //{
+            //    Console.WriteLine(flight);
+            //}
 
-            Console.WriteLine();
-            Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine();
 
-            flightService.ImportFlightsFromCsv("files/AddFlights.csv");
+            //flightService.ImportFlightsFromCsv("files/AddFlights.csv");
 
-            foreach (var flight in flightService.GetAllFlights())
-            {
-                Console.WriteLine(flight);
-            }
+            //foreach (var flight in flightService.GetAllFlights())
+            //{
+            //    Console.WriteLine(flight);
+            //}
 
             //var list = bookingService.GetPassengerBookings(1);
             //foreach (Booking item in list) { Console.WriteLine(item); }

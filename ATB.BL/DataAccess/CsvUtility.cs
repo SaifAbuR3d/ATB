@@ -119,7 +119,7 @@ namespace ATB.DataAccess
         }
 
 
-        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath) // without validation  (data is checked and valid)
+        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath) // without validation  (data is checked valid)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {

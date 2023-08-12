@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ATB.Entities
 {
@@ -10,14 +11,47 @@ namespace ATB.Entities
     }
     internal readonly struct Flight
     {
-       // private static int lastId = 1;
+        // private static int lastId = 1;
+        [Required(ErrorMessage = "Flight ID is required")]
         public int FlightId { get; init; }
+
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "Price is required")]
+        [Range(1.0, 20000.0, ErrorMessage =
+            "Price Must be a nonnegative decimal in range (1.0 to 20000.0).")]
         public decimal Price { get; init; }
+        
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Departure country is required")]
+        [StringLength(20, ErrorMessage =
+            "Departure country should be less than or equal to 20 characters.")]
         public string DepartureCountry { get; init; }
+
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Destination country is required")]
+        [StringLength(20, ErrorMessage =
+            "Destination country should be less than or equal to 20 characters.")]
         public string DestinationCountry { get; init; }
+
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Departure date is required")]
+        [Range(typeof(DateTime),"today", "future", ErrorMessage = "Allowed Range: today → future")]
         public DateOnly DepartureDate { get; init; }
+
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Departure airport is required")]
+        [StringLength(20, ErrorMessage =
+            "Departure airport should be less than or equal to 20 characters.")]
         public string DepartureAirport { get; init; }
+
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Arrival airport is required")]
+        [StringLength(20, ErrorMessage =
+            "Arrival airport should be less than or equal to 20 characters.")]
         public string ArrivalAirport { get; init; }
+
+        [EnumDataType(typeof(FlightClass))]
+        [Required(ErrorMessage = "Flight class is required")]
         public FlightClass FClass { get; init; }
 
         public Flight(int flightId, decimal price, string departureCountry, string destinationCountry, DateOnly departureDate, string departureAirport, string arrivalAirport, FlightClass fClass)
