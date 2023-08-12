@@ -1,5 +1,6 @@
 ﻿using ATB.Entities;
 using ATB.Services;
+using CsvHelper;
 using System.Collections;
 
 namespace ATB.DataAccess
@@ -11,7 +12,7 @@ namespace ATB.DataAccess
         {
             try
             {
-                string bookingLine = $"{booking.passenger.PassengerId},{booking.flight.FlightId}";
+                string bookingLine = $"{booking.passenger.PassengerId},{booking.flight.FlightId},{booking.FClass}";
                 File.AppendAllLines(bookingsFilePath, new[] { bookingLine });
                 Console.WriteLine("Booking added successfully!");
             }
@@ -28,7 +29,7 @@ namespace ATB.DataAccess
             IFlightRepository flightRepository = new FileFlightRepository();
             FlightService flightService = new FlightService(flightRepository);
 
-            FilePassengerRepository passengerRepository = new FilePassengerRepository();
+            IPassengerRepository passengerRepository = new FilePassengerRepository();
 
             List<Booking> allBookings = new List<Booking>();
 
@@ -40,13 +41,14 @@ namespace ATB.DataAccess
                 {
                     string[] values = line.Split(',');
 
-                    if (values.Length >= 2 && int.TryParse(values[0], out int passengerId))
+                    if (values.Length >= 3 && int.TryParse(values[0], out int passengerId))
                     {
                         int flightId = int.Parse(values[1]);
-                        Flight flight = flightService.GetFlightById(flightId); 
-                        Passenger passenger = passengerRepository.GetPassengerById(passengerId);
+                        Passenger? passenger = passengerRepository.GetPassenger(passengerId);
+                        FlightClass flightClass = Enum.Parse<FlightClass>(values[2], true); // true to ignore case
+                        Flight? flight = flightService.GetFlight(flightId, flightClass); ///////////////////////////////////////////////// 
                         
-                        allBookings.Add(new Booking(flight, passenger));
+                        allBookings.Add(new Booking((Flight)flight, passenger, flightClass)); /////////////////////////////////////
                     }
                 }
             }
@@ -70,7 +72,7 @@ namespace ATB.DataAccess
         }
 
 
-        private void WriteBookingsIntoFile(IEnumerable<Booking> bookings)
+        private void WriteBookingsIntoFile(IEnumerable<Booking> bookings) // OVERWRITES Existing Lines
         {
             try
             {
@@ -78,7 +80,7 @@ namespace ATB.DataAccess
                 {
                     foreach (Booking booking in bookings)
                     {
-                        string line = $"{booking.passenger.PassengerId},{booking.flight.FlightId}"; 
+                        string line = $"{booking.passenger.PassengerId},{booking.flight.FlightId},{booking.FClass}"; 
                         writer.WriteLine(line);
                     }
                 }
@@ -97,22 +99,20 @@ namespace ATB.DataAccess
             // replace the contents of bookings.txt with the new list 
             WriteBookingsIntoFile(updatedList);
         }
-        public void RemoveBooking(Passenger passenger, Flight flight)
+        public void RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            RemoveBooking(new Booking(flight, passenger)); 
+            RemoveBooking(new Booking(flight, passenger, flightClass)); 
         }
 
-        public void UpdateBookingClass(Booking booking, FlightClass newClass)
+        public void UpdateBookingClass(Booking booking, FlightClass newClass) /////////////////////////////////////////
         {
             throw new NotImplementedException();
         }
 
 
-        
-        // not needed, remove it from the interface
-        public void AddBooking(Passenger passenger, Flight flight)
+        public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            throw new NotImplementedException();
+            AddBooking(new Booking(flight, passenger, flightClass)); 
         }
     }
 }

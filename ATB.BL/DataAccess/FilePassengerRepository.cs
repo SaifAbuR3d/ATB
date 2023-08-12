@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ATB.DataAccess
 {
-    internal class FilePassengerRepository : IFilePassengerRepository
+    internal class FilePassengerRepository : IPassengerRepository
     {
         private string passengersFilePath = "files/Passengers.txt";
 
@@ -20,11 +20,15 @@ namespace ATB.DataAccess
         }
 
 
-        public Passenger GetPassengerById(int passengerId) // TODO : if the key is not here ?  -> maybe handle that at PassengerService
+        public Passenger? GetPassenger(int passengerId) // returns null if the passenger is not in the dictionary
         {
-            return passengerDictionary[passengerId];
+            if (passengerDictionary.TryGetValue((passengerId), out Passenger passenger))
+            {
+                return passenger;
+            }
+            return null;
         }
-
+        
         private void InitializePassengerDictionary()
         {
             passengerDictionary = new Dictionary<int, Passenger>();

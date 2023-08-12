@@ -6,7 +6,8 @@ namespace ATB.DataAccess
     internal class FileFlightRepository : IFlightRepository
     {
         private string flightsFilePath = "files/Flights.csv";
-        private Dictionary<int, Flight> flightDictionary;
+
+        private Dictionary<(int, FlightClass), Flight> flightDictionary;   // (id,class) -> flight
 
         public FileFlightRepository()
         {
@@ -30,13 +31,17 @@ namespace ATB.DataAccess
             return CsvUtility.ReadFlightsFromCsv(flightsFilePath);
         }
 
-        public Flight GetFlightById(int flightId) // TODO : if the key is not here ?
+        public Flight? GetFlight(int flightId, FlightClass flightClass) // returns null if the flight is not in the dictionary
         {
-            return flightDictionary[flightId];
+            if(flightDictionary.TryGetValue((flightId, flightClass), out Flight flight))
+            {
+                return flight;
+            }
+            return null; 
         }
         private void InitializeFlightDictionary()
         {
-            flightDictionary = new Dictionary<int, Flight>();
+            flightDictionary = new Dictionary<(int, FlightClass), Flight>();
 
             try
             {
@@ -54,9 +59,9 @@ namespace ATB.DataAccess
                         DateOnly departureDate = DateOnly.Parse(values[4]);
                         string departureAirport = values[5];
                         string arrivalAirport = values[6];
-                        FlightClass fClass = Enum.Parse<FlightClass>(values[7]);
+                        FlightClass fClass = Enum.Parse<FlightClass>(values[7],true); // true to ignore case 
 
-                        flightDictionary[id] = new Flight
+                        flightDictionary[(id, fClass)] = new Flight
                         {
                             FlightId = id,
                             Price = price,

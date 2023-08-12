@@ -48,12 +48,10 @@ namespace ATB.Services
         }
 
         // TODO - Add checks if the passenger has already booked this flight.
-        public void AddBooking(Passenger passenger, Flight flight)
+        public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            _bookingRepository.AddBooking(new Booking(flight, passenger));
+            _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
         }
-
-        // can be removed
         public void AddBooking(Booking booking)
         {
             _bookingRepository.AddBooking(booking);
@@ -67,10 +65,9 @@ namespace ATB.Services
 
         }
 
-        // can be removed
-        public void RemoveBooking(Passenger passenger, Flight flight)
+        public void RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            _bookingRepository.RemoveBooking(new Booking(flight, passenger));
+            _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
         }
     }
 }

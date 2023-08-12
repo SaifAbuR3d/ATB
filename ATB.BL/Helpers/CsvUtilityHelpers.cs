@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 internal static class CsvUtilityHelpers
 {
 
-    internal static IEnumerable<Flight> GetValidFlightGroups(IEnumerable<Flight> flights)
+    internal static IEnumerable<Flight> GetValidFlightGroups(IEnumerable<Flight> flights)  // should this method be at Services ?
     {
         return flights
                 .GroupBy(flight => flight.FlightId)
@@ -22,14 +22,14 @@ internal static class CsvUtilityHelpers
                 .SelectMany(group => group);
     }
 
-    internal static void PrintFlightsWithMissingFlightClasses(IEnumerable<Flight> flightsWithThreeDifferentClasses, List<Flight> flights)
+    internal static void PrintFlightsWithMissingFlightClasses(IEnumerable<Flight> flightsWithThreeDifferentClasses, List<Flight> originalFlights)
     {
-        var originalFlightIds = flights.Select(flight => flight.FlightId).Distinct();
-        var filteredFlightIds = flightsWithThreeDifferentClasses.Select(flight => flight.FlightId).Distinct();
+        var originalFlightsIds = originalFlights.Select(flight => flight.FlightId).Distinct();
+        var filteredFlightsIds = flightsWithThreeDifferentClasses.Select(flight => flight.FlightId).Distinct();
 
 
-        var excludedFlightIds = originalFlightIds.Except(filteredFlightIds);
-        foreach (var flight in excludedFlightIds)
+        var excludedFlightsIds = originalFlightsIds.Except(filteredFlightsIds);
+        foreach (var flight in excludedFlightsIds)
         {
             Console.WriteLine($"Error With Flight {flight}");
             Console.WriteLine($"Validation Error: Flight Must have three different classes (Economy, Business, First Class).");
@@ -88,7 +88,7 @@ internal static class CsvUtilityHelpers
         }
 
         // Validate fClass
-        if (!Enum.TryParse<FlightClass>(csvReader.GetField(7), out _))
+        if (!Enum.TryParse<FlightClass>(csvReader.GetField(7), true, out _))
         {
             validationResult.Errors.Add($"Invalid FlightClass \"{csvReader.GetField(7) ?? String.Empty}\": Must be one of (Economy, Business, First Class)");
         }

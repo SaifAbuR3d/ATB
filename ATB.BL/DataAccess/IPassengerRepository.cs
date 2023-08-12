@@ -2,8 +2,8 @@
 
 namespace ATB.DataAccess
 {
-    internal interface IFilePassengerRepository
+    internal interface IPassengerRepository
     {
-        Passenger GetPassengerById(int passengerId);
+        Passenger? GetPassenger(int passengerId);
     }
 }

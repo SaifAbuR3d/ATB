@@ -32,7 +32,7 @@ namespace ATB.DataAccess
 
                 if (validationResult.IsValid)
                 {
-                    // the below code is safe. all fields are Parsable  
+                    // the below code is safe. all fields are guaranteed Parsable
                     var flightId = int.Parse(csvReader.GetField(0));
                     var price = decimal.Parse(csvReader.GetField(1));
                     var departureCountry = csvReader.GetField(2);
@@ -40,7 +40,7 @@ namespace ATB.DataAccess
                     var departureDate = DateOnly.Parse(csvReader.GetField(4));
                     var departureAirport = csvReader.GetField(5);
                     var arrivalAirport = csvReader.GetField(6);
-                    var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7));
+                    var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);
 
                     var flight = new Flight(flightId, price, departureCountry, destinationCountry, departureDate, departureAirport, arrivalAirport, fClass);
                     flights.Add(flight);
@@ -52,7 +52,7 @@ namespace ATB.DataAccess
                 currentIndex++;
             }
 
-            var flightsWithThreeDifferentClasses = CsvUtilityHelpers.GetValidFlightGroups(flights);
+            var flightsWithThreeDifferentClasses = CsvUtilityHelpers.GetValidFlightGroups(flights);  // valid flights
 
             if (flightsWithThreeDifferentClasses.Count() != flights.Count())
             {
@@ -62,7 +62,7 @@ namespace ATB.DataAccess
             return flightsWithThreeDifferentClasses;
         }
 
-        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath) // without validation  (data is checked valid)
+        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath) // without validation  (data is already checked valid)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
@@ -82,7 +82,7 @@ namespace ATB.DataAccess
                 var departureDate = DateOnly.Parse(csvReader.GetField(4));
                 var DepartureAirport = csvReader.GetField(5);
                 var arrivalAirport = csvReader.GetField(6);
-                var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7));
+                var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);
 
                 Flight flight = new Flight(flightId, price, departureCountry, destinationCountry, departureDate, DepartureAirport, arrivalAirport, fClass);
                 flights.Add(flight);
@@ -96,9 +96,9 @@ namespace ATB.DataAccess
             {
                 return; 
             }
-            try
+            try 
             {
-                using (StreamWriter writer = new StreamWriter(flightsFilePath, true, Encoding.UTF8))
+                using (StreamWriter writer = new StreamWriter(flightsFilePath, true, Encoding.UTF8))  // append the flights to file
                 {
                     foreach (Flight flight in flights)
                     {

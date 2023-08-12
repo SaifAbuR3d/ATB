@@ -8,46 +8,64 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection;
 
-namespace ATB.Presentation
+namespace ATB.Presentation                           // TODO - store FlightClass in bookings, make modifications in other classes 
 {
     internal class Program
     {
         static void Main()
         {
-            //ValidationDetailsHelper.DisplayValidationDetails(typeof(Flight)); 
+            //ValidationDetailsHelper.DisplayValidationDetails(typeof(Flight));
+            //
+
             IFlightRepository flightRepository = new FileFlightRepository();
             FlightService flightService = new FlightService(flightRepository);
 
             IBookingRepository bookingRepository = new FileBookingRepository();
             BookingService bookingService = new BookingService(bookingRepository);
 
-            FilePassengerRepository passengerRepository = new FilePassengerRepository();
+            IPassengerRepository passengerRepository = new FilePassengerRepository();
 
-            foreach (var flight in flightService.GetAllFlights())
+            //foreach (var flight in flightService.GetAllFlights())
+            //{
+            //    Console.WriteLine(flight);
+            //}
+            Console.WriteLine();
+            foreach (var booking in bookingService.GetAllBookings())
             {
-                Console.WriteLine(flight);
+                Console.WriteLine(booking);
             }
 
-            Console.WriteLine();
-            Console.WriteLine();
 
-            flightService.ImportFlightsFromCsv("files/AddFlights.csv");
+            ///
 
-            foreach (var flight in flightService.GetAllFlights())
+
+
+            Console.WriteLine();
+            foreach (var booking in bookingService.GetAllBookings())
             {
-                Console.WriteLine(flight);
+                Console.WriteLine(booking);
             }
+            Console.WriteLine();
+
+
+            //Console.WriteLine();
+            //Console.WriteLine();
+
+            //foreach (var flight in flightService.GetAllFlights())
+            //{
+            //    Console.WriteLine(flight);
+            //}
 
             //var list = bookingService.GetPassengerBookings(1);
             //foreach (Booking item in list) { Console.WriteLine(item); }
 
-            //bookingService.RemoveBooking(passengerRepository.GetPassengerById(1), flightService.GetFlightById(1));
+            //bookingService.RemoveBooking(passengerRepository.GetPassengerById(1), flightService.GetFlight(1));
 
             //Console.WriteLine();
             //list = bookingService.GetPassengerBookings(1);
             //foreach (Booking item in list) { Console.WriteLine(item); }
 
-            //bookingService.AddBooking(passengerRepository.GetPassengerById(2), flightService.GetFlightById(3));
+            //bookingService.AddBooking(passengerRepository.GetPassengerById(2), flightService.GetFlight(3));
             //Console.WriteLine();
             //list = bookingService.GetPassengerBookings(2);
             //foreach (Booking item in list) { Console.WriteLine(item); }
@@ -57,7 +75,7 @@ namespace ATB.Presentation
 
             //foreach (var flight in list) { Console.WriteLine(flight); }
             //Console.WriteLine();
-            //Console.WriteLine(flightService.GetFlightById(0));
+            //Console.WriteLine(flightService.GetFlight(0));
 
             //List<Flight> list = flightService.GetAllFlights().ToList();
 

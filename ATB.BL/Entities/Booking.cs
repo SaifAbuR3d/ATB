@@ -6,16 +6,18 @@ namespace ATB.Entities
     {
         public Passenger passenger { get; set; }
         public Flight flight { get; set; }
+        public FlightClass FClass { get; set; }
         public  DateTime ReservationDate { get; } = DateTime.Now;
-        public Booking(Flight _flight, Passenger _passenger )
+        public Booking(Flight _flight, Passenger _passenger, FlightClass fClass)
         {
             flight = _flight;
             passenger = _passenger;
+            FClass = fClass;
         }
 
         public override string ToString()
         {
-            return $"Passenger: {passenger}\nFlight: {flight}\n At: {ReservationDate}";
+            return $"Passenger: {passenger}\nFlight: {flight} with Class {FClass} \n At: {ReservationDate}";
         }
         public override bool Equals(object? obj)
         {

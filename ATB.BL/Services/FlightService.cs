@@ -41,9 +41,9 @@ namespace ATB.Services
             _flightRepository.AddAllFlights(flights);
         }
 
-        public Flight GetFlightById(int flightId)
+        public Flight? GetFlight(int flightId, FlightClass flightClass)
         {
-            return _flightRepository.GetFlightById(flightId);
+            return _flightRepository.GetFlight(flightId, flightClass);
         }
 
 
