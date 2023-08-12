@@ -14,29 +14,29 @@ namespace ATB.Presentation
     {
         static void Main()
         {
-            ValidationDetailsHelper.DisplayValidationDetails(typeof(Flight)); 
-            //IFlightRepository flightRepository = new FileFlightRepository();
-            //FlightService flightService = new FlightService(flightRepository);
+            //ValidationDetailsHelper.DisplayValidationDetails(typeof(Flight)); 
+            IFlightRepository flightRepository = new FileFlightRepository();
+            FlightService flightService = new FlightService(flightRepository);
 
-            //IBookingRepository bookingRepository = new FileBookingRepository(); 
-            //BookingService bookingService = new BookingService(bookingRepository);
-            
-            //FilePassengerRepository passengerRepository = new FilePassengerRepository();
+            IBookingRepository bookingRepository = new FileBookingRepository();
+            BookingService bookingService = new BookingService(bookingRepository);
 
-            //foreach (var flight in flightService.GetAllFlights())
-            //{
-            //    Console.WriteLine(flight);
-            //}
+            FilePassengerRepository passengerRepository = new FilePassengerRepository();
 
-            //Console.WriteLine();
-            //Console.WriteLine();
+            foreach (var flight in flightService.GetAllFlights())
+            {
+                Console.WriteLine(flight);
+            }
 
-            //flightService.ImportFlightsFromCsv("files/AddFlights.csv");
+            Console.WriteLine();
+            Console.WriteLine();
 
-            //foreach (var flight in flightService.GetAllFlights())
-            //{
-            //    Console.WriteLine(flight);
-            //}
+            flightService.ImportFlightsFromCsv("files/AddFlights.csv");
+
+            foreach (var flight in flightService.GetAllFlights())
+            {
+                Console.WriteLine(flight);
+            }
 
             //var list = bookingService.GetPassengerBookings(1);
             //foreach (Booking item in list) { Console.WriteLine(item); }

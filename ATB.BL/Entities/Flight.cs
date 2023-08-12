@@ -51,7 +51,7 @@ namespace ATB.Entities
         public string ArrivalAirport { get; init; }
 
         [EnumDataType(typeof(FlightClass))]
-        [Required(ErrorMessage = "Flight class is required")]
+        [Required(ErrorMessage = "FlightClass is required")]
         public FlightClass FClass { get; init; }
 
         public Flight(int flightId, decimal price, string departureCountry, string destinationCountry, DateOnly departureDate, string departureAirport, string arrivalAirport, FlightClass fClass)
