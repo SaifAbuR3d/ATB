@@ -27,7 +27,7 @@ namespace ATB.DataAccess
 
         public IEnumerable<Flight> GetAllFlights()
         {
-            return CsvUtility.ParseFlightsFromCsv(flightsFilePath);
+            return CsvUtility.ReadFlightsFromCsv(flightsFilePath);
         }
 
         public Flight GetFlightById(int flightId) // TODO : if the key is not here ?
