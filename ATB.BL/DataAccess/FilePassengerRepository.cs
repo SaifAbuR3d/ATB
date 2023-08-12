@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace ATB.DataAccess
 {
-    internal class FilePassengerRepository
+    internal class FilePassengerRepository : IFilePassengerRepository
     {
         private string passengersFilePath = "files/Passengers.txt";
 
         private Dictionary<int, Passenger> passengerDictionary;
 
-        public FilePassengerRepository() 
+        public FilePassengerRepository()
         {
             InitializePassengerDictionary();
 
         }
 
 
-        public Passenger GetPassengerById(int passengerId) // TODO : if the key is not here ?
+        public Passenger GetPassengerById(int passengerId) // TODO : if the key is not here ?  -> maybe handle that at PassengerService
         {
             return passengerDictionary[passengerId];
         }
@@ -41,7 +41,7 @@ namespace ATB.DataAccess
                     {
                         string name = values[1];
 
-                        passengerDictionary[id] = new Passenger(id, name); 
+                        passengerDictionary[id] = new Passenger(id, name);
                     }
                 }
             }

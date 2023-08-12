@@ -19,7 +19,13 @@ namespace ATB.Presentation
             
             FilePassengerRepository passengerRepository = new FilePassengerRepository();
 
-            //var list = bookingService.GetPassengerBookings(2); 
+            //var list = bookingService.GetPassengerBookings(1);
+            //foreach (Booking item in list) { Console.WriteLine(item); }
+
+            //bookingService.RemoveBooking(passengerRepository.GetPassengerById(1), flightService.GetFlightById(1));
+
+            //Console.WriteLine();
+            //list = bookingService.GetPassengerBookings(1);
             //foreach (Booking item in list) { Console.WriteLine(item); }
 
             //bookingService.AddBooking(passengerRepository.GetPassengerById(2), flightService.GetFlightById(3));

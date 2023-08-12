@@ -1,5 +1,6 @@
 ﻿using ATB.Entities;
 using ATB.Services;
+using System.Collections;
 
 namespace ATB.DataAccess
 {
@@ -20,10 +21,7 @@ namespace ATB.DataAccess
             }
         }
 
-        public void AddBooking(Passenger passenger, Flight flight)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public IEnumerable<Booking> GetAllBookings()
         {
@@ -72,14 +70,36 @@ namespace ATB.DataAccess
         }
 
 
+        private void WriteBookingsIntoFile(IEnumerable<Booking> bookings)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(bookingsFilePath, false)) // Open the file in write mode, which overwrites existing content
+                {
+                    foreach (Booking booking in bookings)
+                    {
+                        string line = $"{booking.passenger.PassengerId},{booking.flight.FlightId}"; 
+                        writer.WriteLine(line);
+                    }
+                }
+                Console.WriteLine("bookings written to the file successfully!");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while writing to the file: {ex.Message}");
+            }
+        }
         public void RemoveBooking(Booking booking)
         {
-            throw new NotImplementedException();
-        }
+            // Contains All Bookings Except For (booking)
+            IEnumerable<Booking> updatedList = GetAllBookings().Where(_booking => !_booking.Equals(booking));
 
+            // replace the contents of bookings.txt with the new list 
+            WriteBookingsIntoFile(updatedList);
+        }
         public void RemoveBooking(Passenger passenger, Flight flight)
         {
-            throw new NotImplementedException();
+            RemoveBooking(new Booking(flight, passenger)); 
         }
 
         public void UpdateBookingClass(Booking booking, FlightClass newClass)
@@ -88,5 +108,11 @@ namespace ATB.DataAccess
         }
 
 
+        
+        // not needed, remove it from the interface
+        public void AddBooking(Passenger passenger, Flight flight)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
