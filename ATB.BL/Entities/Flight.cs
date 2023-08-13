@@ -82,7 +82,7 @@ namespace ATB.Entities
             {
                 return false;
             }
-            return this.FlightId.Equals( ((Flight)obj ).FlightId); 
+            return FlightId.Equals( ((Flight)obj ).FlightId)  &&  FClass.Equals(((Flight)obj).FClass); 
         }
 
         public override int GetHashCode()

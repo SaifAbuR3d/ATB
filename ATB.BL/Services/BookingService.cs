@@ -32,8 +32,9 @@ namespace ATB.Services
                      (booking.flight.ArrivalAirport.Equals(bookingSearchCriteria.ArrivalAirport) || DontCare(bookingSearchCriteria.ArrivalAirport)) &&
                      (booking.flight.DepartureCountry.Equals(bookingSearchCriteria.DepartureCountry) || DontCare(bookingSearchCriteria.DepartureCountry)) &&
                      (booking.flight.DepartureAirport.Equals(bookingSearchCriteria.DepartureAirport) || DontCare(bookingSearchCriteria.DepartureAirport)) &&
-                     (booking.flight.Equals(bookingSearchCriteria.flight) || DontCare(bookingSearchCriteria.flight)) &&
-                     (booking.passenger.Equals(bookingSearchCriteria.passenger) || DontCare(bookingSearchCriteria.passenger))
+
+                     (booking.flight.FlightId.Equals(bookingSearchCriteria.FlightId) || DontCare(bookingSearchCriteria.FlightId)) &&
+                     (booking.passenger.PassengerId.Equals(bookingSearchCriteria.PassengerId) || DontCare(bookingSearchCriteria.PassengerId))
                      );
         }
         public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)

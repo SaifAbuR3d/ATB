@@ -2,8 +2,12 @@
 {
     internal class BookingSearchCriteria
     {
-        public Flight? flight { get; set; }
-        public Passenger? passenger { get; set; }
+       // public Flight? flight { get; set; }
+
+        public int? FlightId { get; set; }
+        public int? PassengerId { get; set; }
+
+       // public Passenger? passenger { get; set; }
         public decimal? Price { get; set; }
         public string? DepartureCountry { get; set; }
         public string? DestinationCountry { get; set; }

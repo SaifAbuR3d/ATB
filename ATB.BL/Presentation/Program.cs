@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace ATB.Presentation
 {
-    internal class Program  // TODO - SearchForFlights, FilterFlights.    Consistency check for flights
+    internal class Program  // TODO - Consistency check for flights when added from csv, 3 flights with the same flightId must have same data (with different classes) 
     {  
         static IFlightRepository flightRepository = new FileFlightRepository();
         static FlightService flightService = new FlightService(flightRepository);
@@ -21,7 +21,6 @@ namespace ATB.Presentation
         static IPassengerRepository passengerRepository = new FilePassengerRepository();
         static void Main()
         {
-            UserInputHelper.GetValidFlightClass(); 
             RunMainMenu();
         }
 
@@ -143,11 +142,104 @@ namespace ATB.Presentation
             Console.Clear();
             Console.WriteLine("Filter Bookings");
 
-            // ////////////
+            BookingSearchCriteria filterCriteria = GetSearchCriteriaFromManager();
+
+            IEnumerable<Booking> filteredBookings = bookingService.FilterBookings(filterCriteria);
+
+            if (filteredBookings.Any())
+            {
+                Console.WriteLine("Filtered Bookings:");
+                foreach (var booking in filteredBookings)
+                {
+                    Console.WriteLine($"Passenger: {booking.passenger.PassengerName}");
+                    Console.WriteLine($"Flight ID: {booking.flight.FlightId}");
+                    Console.WriteLine($"Departure: {booking.flight.DepartureCountry} - {booking.flight.DepartureAirport}");
+                    Console.WriteLine($"Destination: {booking.flight.DestinationCountry} - {booking.flight.ArrivalAirport}");
+                    Console.WriteLine($"Departure Date: {booking.flight.DepartureDate}");
+                    Console.WriteLine($"Price: {booking.flight.Price}");
+                    Console.WriteLine($"Class: {booking.flight.FClass}");
+                    Console.WriteLine("--------------------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No bookings match the filter criteria.");
+            }
 
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
+
+        private static BookingSearchCriteria GetSearchCriteriaFromManager()
+        {
+            BookingSearchCriteria criteria = new BookingSearchCriteria();
+
+            Console.Write("Enter Price (or press Enter to skip): ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal price))
+            {
+                criteria.Price = price;
+            }
+
+            Console.Write("Enter Departure Country (or press Enter to skip): ");
+
+            criteria.DepartureCountry = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.DepartureCountry))
+            {
+                criteria.DepartureCountry = null;
+            }
+
+            Console.Write("Enter Destination Country (or press Enter to skip): ");
+            criteria.DestinationCountry = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.DestinationCountry))
+            {
+                criteria.DestinationCountry = null;
+            }
+
+            Console.Write("Enter Departure Date (yyyy-MM-dd) (or press Enter to skip): ");
+            if (DateOnly.TryParse(Console.ReadLine(), out DateOnly departureDate))
+            {
+                criteria.DepartureDate = departureDate;
+            }
+
+            Console.Write("Enter Departure Airport (or press Enter to skip): ");
+            criteria.DepartureAirport = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.DepartureAirport))
+            {
+                criteria.DepartureAirport = null;
+            }
+
+            Console.Write("Enter Arrival Airport (or press Enter to skip): ");
+            criteria.ArrivalAirport = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.ArrivalAirport))
+            {
+                criteria.ArrivalAirport = null;
+            }
+
+            Console.Write("Enter Flight Class (Economy, Business, FirstClass) (or press Enter to skip): ");
+            if (Enum.TryParse<FlightClass>(Console.ReadLine(), out FlightClass flightClass))
+            {
+                criteria.FClass = flightClass;
+            }
+
+            Console.Write("Enter Flight Id (or press Enter to skip): ");
+            if (int.TryParse(Console.ReadLine(), out int flightId))
+            {
+                criteria.FlightId = flightId;
+            }
+
+            Console.Write("Enter Passenger Id (or press Enter to skip): ");
+            if (int.TryParse(Console.ReadLine(), out int passengerId))
+            {
+                criteria.PassengerId = passengerId;
+            }
+
+            return criteria;
+        }
+
 
         private static void ImportFlightsFromCSV()
         {
@@ -161,7 +253,7 @@ namespace ATB.Presentation
             Console.ReadKey();
         }
         #endregion
-
+         
 
         #region Passenger Methods
         private static void BookFlight(Passenger passenger)
@@ -189,10 +281,92 @@ namespace ATB.Presentation
         {
             Console.Clear();
             Console.WriteLine("Search for Flights");
-            // Implement the logic to search for flights here
+
+            FlightSearchCriteria searchCriteria = GetSearchCriteriaFromPassenger();
+
+            // Call the FlightService method to search for flights based on the search criteria
+            IEnumerable<Flight> foundFlights = flightService.FilterFlights(searchCriteria);
+
+            if (foundFlights.Any())
+            {
+                Console.WriteLine("Found Flights:");
+                foreach (var flight in foundFlights)
+                {
+                    Console.WriteLine($"Flight ID: {flight.FlightId}");
+                    Console.WriteLine($"Departure: {flight.DepartureCountry} - {flight.DepartureAirport}");
+                    Console.WriteLine($"Destination: {flight.DestinationCountry} - {flight.ArrivalAirport}");
+                    Console.WriteLine($"Departure Date: {flight.DepartureDate}");
+                    Console.WriteLine($"Price: {flight.Price}");
+                    Console.WriteLine($"Class: {flight.FClass}");
+                    Console.WriteLine("--------------------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No flights found matching the search criteria.");
+            }
+
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        }
+        } //
+
+        private static FlightSearchCriteria GetSearchCriteriaFromPassenger()
+        {
+            FlightSearchCriteria criteria = new FlightSearchCriteria();
+
+            Console.Write("Enter Price (or press Enter to skip): ");
+            if (decimal.TryParse(Console.ReadLine(), out decimal price))
+            {
+                criteria.Price = price;
+            }
+
+            Console.Write("Enter Departure Country (or press Enter to skip): ");
+
+            criteria.DepartureCountry = Console.ReadLine();
+
+            if(String.IsNullOrWhiteSpace(criteria.DepartureCountry))
+            {
+                criteria.DepartureCountry = null; 
+            }
+
+            Console.Write("Enter Destination Country (or press Enter to skip): ");
+            criteria.DestinationCountry = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.DestinationCountry))
+            {
+                criteria.DestinationCountry = null;
+            }
+
+            Console.Write("Enter Departure Date (yyyy-MM-dd) (or press Enter to skip): ");
+            if (DateOnly.TryParse(Console.ReadLine(), out DateOnly departureDate))
+            {
+                criteria.DepartureDate = departureDate;
+            }
+
+            Console.Write("Enter Departure Airport (or press Enter to skip): ");
+            criteria.DepartureAirport = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.DepartureAirport))
+            {
+                criteria.DepartureAirport = null;
+            }
+
+            Console.Write("Enter Arrival Airport (or press Enter to skip): ");
+            criteria.ArrivalAirport = Console.ReadLine();
+
+            if (String.IsNullOrWhiteSpace(criteria.ArrivalAirport))
+            {
+                criteria.ArrivalAirport = null;
+            }
+
+            Console.Write("Enter Flight Class (Economy, Business, FirstClass) (or press Enter to skip): ");
+            if (Enum.TryParse<FlightClass>(Console.ReadLine(), out FlightClass flightClass))
+            {
+                criteria.FClass = flightClass;
+            }
+
+            return criteria;
+        } //
 
         private static void CancelBooking(Passenger passenger)
         {
@@ -216,7 +390,7 @@ namespace ATB.Presentation
             Console.ReadKey();
         } //
 
-        private static void ModifyBooking(Passenger passenger)
+        private static void ModifyBooking(Passenger passenger) 
         {
             Console.Clear();
             Console.WriteLine("Modify Booking");
