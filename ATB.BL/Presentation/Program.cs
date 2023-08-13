@@ -8,101 +8,250 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection;
 
-namespace ATB.Presentation                           // TODO - store FlightClass in bookings, make modifications in other classes 
+namespace ATB.Presentation
 {
-    internal class Program
-    {
+    internal class Program  // TODO - SearchForFlights, FilterFlights.    Consistency check for flights
+    {  
+        static IFlightRepository flightRepository = new FileFlightRepository();
+        static FlightService flightService = new FlightService(flightRepository);
+
+        static IBookingRepository bookingRepository = new FileBookingRepository();
+        static BookingService bookingService = new BookingService(bookingRepository);
+
+        static IPassengerRepository passengerRepository = new FilePassengerRepository();
         static void Main()
         {
-            //ValidationDetailsHelper.DisplayValidationDetails(typeof(Flight));
-            //
-
-            IFlightRepository flightRepository = new FileFlightRepository();
-            FlightService flightService = new FlightService(flightRepository);
-
-            IBookingRepository bookingRepository = new FileBookingRepository();
-            BookingService bookingService = new BookingService(bookingRepository);
-
-            IPassengerRepository passengerRepository = new FilePassengerRepository();
-
-            //foreach (var flight in flightService.GetAllFlights())
-            //{
-            //    Console.WriteLine(flight);
-            //}
-            Console.WriteLine();
-            foreach (var booking in bookingService.GetAllBookings())
-            {
-                Console.WriteLine(booking);
-            }
-
-
-            ///
-            bookingService.UpdateBookingClass(passengerRepository.GetPassenger(2), (Flight)flightService.GetFlight(2, FlightClass.Business), FlightClass.Business, FlightClass.Economy); 
-
-
-            Console.WriteLine();
-            foreach (var booking in bookingService.GetAllBookings())
-            {
-                Console.WriteLine(booking);
-            }
-            Console.WriteLine();
-
-            //Console.WriteLine();
-            //Console.WriteLine();
-
-            //foreach (var flight in flightService.GetAllFlights())
-            //{
-            //    Console.WriteLine(flight);
-            //}
-
-            //var list = bookingService.GetPassengerBookings(1);
-            //foreach (Booking item in list) { Console.WriteLine(item); }
-
-            //bookingService.RemoveBooking(passengerRepository.GetPassengerById(1), flightService.GetFlight(1));
-
-            //Console.WriteLine();
-            //list = bookingService.GetPassengerBookings(1);
-            //foreach (Booking item in list) { Console.WriteLine(item); }
-
-            //bookingService.AddBooking(passengerRepository.GetPassengerById(2), flightService.GetFlight(3));
-            //Console.WriteLine();
-            //list = bookingService.GetPassengerBookings(2);
-            //foreach (Booking item in list) { Console.WriteLine(item); }
-            //  flightService.ImportFlightsFromCsv("files/AddFlights.csv");
-
-            //List<Flight> list = flightService.GetAllFlights().Take(6).ToList();
-
-            //foreach (var flight in list) { Console.WriteLine(flight); }
-            //Console.WriteLine();
-            //Console.WriteLine(flightService.GetFlight(0));
-
-            //List<Flight> list = flightService.GetAllFlights().ToList();
-
-            //IBookingRepository bookingRepository = new FileBookingRepository();
-            //BookingService bookingService = new BookingService(bookingRepository); 
-
-            //List<Booking> list = bookingService.GetAllBookings().ToList();
-            //foreach (Booking booking in list)
-            //{
-            //    Console.WriteLine(booking);
-            //}
-            //Console.WriteLine();
-            //Console.WriteLine();
-
-
-            //var bookingSearchCriteria = new BookingSearchCriteria
-            //{
-            //    passenger = new Passenger(3, "a"), 
-            //    DestinationCountry = "a"
-            //};
-            //var filteredList = bookingService.FilterBookings(bookingSearchCriteria);
-            //foreach (Booking booking in filteredList)
-            //{
-            //    Console.WriteLine(booking);
-            //}
-
-
-
+            UserInputHelper.GetValidFlightClass(); 
+            RunMainMenu();
         }
+
+        private static void RunMainMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Welcome to Airport Ticket Booking App!");
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine("1. Passenger");
+                Console.WriteLine("2. Manager");
+                Console.WriteLine("3. Exit");
+                string mainChoice = UserInputHelper.GetValidString("Enter your choice: ");
+
+                switch (mainChoice)
+                {
+                    case "1":
+                        RunPassengerMenu();
+                        break;
+                    case "2":
+                        RunManagerMenu();
+                        break;
+                    case "3":
+                        Console.WriteLine("Exiting the application. Goodbye!");
+                        return; 
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        public static void RunPassengerMenu()
+        {
+            int passengerId = UserInputHelper.GetValidInt("Enter your passenger ID: ");
+            Passenger? passenger = passengerRepository.GetPassenger(passengerId);
+            if (passenger is null)
+            {
+                Console.WriteLine("Invalid passenger ID. Returning to main menu...");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Passenger Menu");
+                Console.WriteLine("--------------");
+                Console.WriteLine("1. Book a Flight");
+                Console.WriteLine("2. Search for Flights");
+                Console.WriteLine("3. Cancel Booking");
+                Console.WriteLine("4. Modify Booking");
+                Console.WriteLine("5. View My Bookings");
+                Console.WriteLine("6. Go Back");
+                string passengerChoice = UserInputHelper.GetValidString("Enter your choice: ");
+
+                switch (passengerChoice)
+                {
+                    case "1":
+                        BookFlight(passenger);
+                        break;
+                    case "2":
+                        SearchForFlights();
+                        break;
+                    case "3":
+                        CancelBooking(passenger);
+                        break;
+                    case "4":
+                        ModifyBooking(passenger);
+                        break;
+                    case "5":
+                        ViewMyBookings(passenger);
+                        break;
+                    case "6":
+                        RunMainMenu();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        static void RunManagerMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Manager Menu");
+                Console.WriteLine("------------");
+                Console.WriteLine("1. Filter Bookings");
+                Console.WriteLine("2. Import Flights from CSV");
+                Console.WriteLine("3. Go Back");
+                string managerChoice = UserInputHelper.GetValidString("Enter your choice: ");
+
+                switch (managerChoice)
+                {
+                    case "1":
+                        FilterBookings();
+                        break;
+                    case "2":
+                        ImportFlightsFromCSV(); 
+                        break;
+                    case "3":
+                        RunMainMenu();
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+
+        #region Manager Methods
+        private static void FilterBookings()
+        {
+            Console.Clear();
+            Console.WriteLine("Filter Bookings");
+
+            // ////////////
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
+        private static void ImportFlightsFromCSV()
+        {
+            Console.Clear();
+            Console.WriteLine("Import Flights from CSV");
+
+            string csvFilePath = UserInputHelper.GetValidString("Enter the path to the CSV file:");
+            flightService.ImportFlightsFromCsv(csvFilePath);
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+        #endregion
+
+
+        #region Passenger Methods
+        private static void BookFlight(Passenger passenger)
+        {
+            Console.Clear();
+            Console.WriteLine("Book a Flight");
+
+            int flightId = UserInputHelper.GetValidInt("Enter the Flight ID: ");
+            FlightClass flightClass = UserInputHelper.GetValidFlightClass("Enter the Flight Class: ", "Invalid Flight Class: Must be one of the following (Economy, Business, FirstClass)");
+
+            Flight? flight = flightService.GetFlight(flightId, flightClass);
+            if (flight is null)
+            {
+                Console.WriteLine("There is no such a Flight. Returning...");
+                Thread.Sleep(2000);
+                return;
+            }
+            bookingService.AddBooking(passenger, (Flight)flight, flightClass);
+            Console.WriteLine("Booking Added Successfully.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        } // 
+
+        private static void SearchForFlights()
+        {
+            Console.Clear();
+            Console.WriteLine("Search for Flights");
+            // Implement the logic to search for flights here
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
+        private static void CancelBooking(Passenger passenger)
+        {
+            Console.Clear();
+            Console.WriteLine("Cancel Booking");
+
+            int flightId = UserInputHelper.GetValidInt("Enter the Flight ID: ");
+            FlightClass flightClass = UserInputHelper.GetValidFlightClass("Enter the Flight Class: ", "Invalid Flight Class: Must be one of the following (Economy, Business, FirstClass)");
+            
+            Flight? flight = flightService.GetFlight(flightId, flightClass); 
+            if (flight is null) 
+            {
+                Console.WriteLine("You Didn't book this flight. Returning...");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            bookingService.RemoveBooking(passenger, (Flight)flight, flightClass);
+            Console.WriteLine("Booking Cancelled Successfully.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        } //
+
+        private static void ModifyBooking(Passenger passenger)
+        {
+            Console.Clear();
+            Console.WriteLine("Modify Booking");
+
+            int flightId = UserInputHelper.GetValidInt("Enter the Flight ID: ");
+            FlightClass flightClass = UserInputHelper.GetValidFlightClass("Enter the Flight Class: ", "Invalid Flight Class: Must be one of the following (Economy, Business, FirstClass)");
+
+            Flight? flight = flightService.GetFlight(flightId, flightClass);
+            if (flight is null)
+            {
+                Console.WriteLine("You Didn't book this flight. Returning...");
+                Thread.Sleep(2000);
+                return;
+            }
+
+            FlightClass newFlightClass = UserInputHelper.GetValidFlightClass("Enter the new Flight Class: ", "Invalid Flight Class: Must be one of the following (Economy, Business, FirstClass)");
+
+            bookingService.UpdateBookingClass(passenger, (Flight)flight, flightClass, newFlightClass);
+            Console.WriteLine("Booking Updated Successfully.");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        } //
+
+        private static void ViewMyBookings(Passenger passenger)
+        {
+            Console.Clear();
+            Console.WriteLine("View My Bookings");
+            IEnumerable<Booking> bookings = bookingService.GetPassengerBookings(passenger); 
+            foreach (Booking booking in bookings)
+            {
+                Console.WriteLine(booking);
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        } //
+        #endregion
     }
 }
