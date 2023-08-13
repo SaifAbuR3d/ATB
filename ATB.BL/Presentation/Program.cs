@@ -37,7 +37,7 @@ namespace ATB.Presentation                           // TODO - store FlightClass
 
 
             ///
-
+            bookingService.UpdateBookingClass(passengerRepository.GetPassenger(2), (Flight)flightService.GetFlight(2, FlightClass.Business), FlightClass.Business, FlightClass.Economy); 
 
 
             Console.WriteLine();
@@ -46,7 +46,6 @@ namespace ATB.Presentation                           // TODO - store FlightClass
                 Console.WriteLine(booking);
             }
             Console.WriteLine();
-
 
             //Console.WriteLine();
             //Console.WriteLine();

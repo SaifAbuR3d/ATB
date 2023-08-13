@@ -104,9 +104,26 @@ namespace ATB.DataAccess
             RemoveBooking(new Booking(flight, passenger, flightClass)); 
         }
 
-        public void UpdateBookingClass(Booking booking, FlightClass newClass) /////////////////////////////////////////
+        public void UpdateBookingClass(Booking booking, FlightClass newFlightClass)
         {
-            throw new NotImplementedException();
+            var allBookingsList = GetAllBookings().ToList();
+
+            // Find the index of the booking to update
+            int bookingIndex = allBookingsList.FindIndex(_booking =>
+                (_booking.passenger.PassengerId == booking.passenger.PassengerId) && (_booking.flight.FlightId == booking.flight.FlightId));
+
+            if (bookingIndex != -1)
+            {
+                // Update the flight class
+                allBookingsList[bookingIndex] = new Booking(booking.flight, booking.passenger, newFlightClass);
+
+                WriteBookingsIntoFile(allBookingsList);
+                Console.WriteLine("Booking modified successfully!");
+            }
+            else
+            {
+                Console.WriteLine("the Booking was not found for modification.");
+            }
         }
 
 

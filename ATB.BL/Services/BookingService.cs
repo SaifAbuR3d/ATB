@@ -69,5 +69,15 @@ namespace ATB.Services
         {
             _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
         }
+
+        public void UpdateBookingClass(Booking booking, FlightClass newFlightClass)
+        {
+            _bookingRepository.UpdateBookingClass(booking, newFlightClass);
+        }
+
+        public void UpdateBookingClass(Passenger passenger, Flight flight, FlightClass flightClass, FlightClass newFlightClass)
+        {
+            UpdateBookingClass(new Booking(flight, passenger, flightClass), newFlightClass); 
+        }
     }
 }
