@@ -51,11 +51,11 @@ namespace ATB.Presentation
 
         public static void RunPassengerMenu()
         {
-            int passengerId = UserInputHelper.GetValidInt("Enter your passenger ID: ");
+            int passengerId = UserInputHelper.GetValidInt("Enter your Passenger ID: ");
             Passenger? passenger = passengerRepository.GetPassenger(passengerId);
             if (passenger is null)
             {
-                Console.WriteLine("Invalid passenger ID. Returning to main menu...");
+                Console.WriteLine("Invalid Passenger ID. Returning to main menu...");
                 Thread.Sleep(2000);
                 return;
             }
@@ -146,13 +146,13 @@ namespace ATB.Presentation
                 Console.WriteLine("Filtered Bookings:");
                 foreach (var booking in filteredBookings)
                 {
-                    Console.WriteLine($"Passenger: {booking.passenger.PassengerName}");
-                    Console.WriteLine($"Flight ID: {booking.flight.FlightId}");
-                    Console.WriteLine($"Departure: {booking.flight.DepartureCountry} - {booking.flight.DepartureAirport}");
-                    Console.WriteLine($"Destination: {booking.flight.DestinationCountry} - {booking.flight.ArrivalAirport}");
-                    Console.WriteLine($"Departure Date: {booking.flight.DepartureDate}");
-                    Console.WriteLine($"Price: {booking.flight.Price}");
-                    Console.WriteLine($"Class: {booking.flight.FClass}");
+                    Console.WriteLine($"Passenger: {booking.Passenger.PassengerName}");
+                    Console.WriteLine($"Flight ID: {booking.Flight.FlightId}");
+                    Console.WriteLine($"Departure: {booking.Flight.DepartureCountry} - {booking.Flight.DepartureAirport}");
+                    Console.WriteLine($"Destination: {booking.Flight.DestinationCountry} - {booking.Flight.ArrivalAirport}");
+                    Console.WriteLine($"Departure Date: {booking.Flight.DepartureDate}");
+                    Console.WriteLine($"Price: {booking.Flight.Price}");
+                    Console.WriteLine($"Class: {booking.Flight.FClass}");
                     Console.WriteLine("--------------------------");
                 }
             }
@@ -372,7 +372,7 @@ namespace ATB.Presentation
             Flight? flight = flightService.GetFlight(flightId, flightClass); 
             if (flight is null) 
             {
-                Console.WriteLine("You Didn't book this flight. Returning...");
+                Console.WriteLine("You Didn't book this Flight. Returning...");
                 Thread.Sleep(2000);
                 return;
             }
@@ -394,7 +394,7 @@ namespace ATB.Presentation
             Flight? flight = flightService.GetFlight(flightId, flightClass);
             if (flight is null)
             {
-                Console.WriteLine("You Didn't book this flight. Returning...");
+                Console.WriteLine("You Didn't book this Flight. Returning...");
                 Thread.Sleep(2000);
                 return;
             }

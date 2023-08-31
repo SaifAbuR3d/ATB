@@ -6,7 +6,7 @@ namespace ATB.DataAccess
     {
         private string flightsFilePath = "files/Flights.csv";
 
-        private Dictionary<(int, FlightClass), Flight> flightDictionary;   // (id,class) -> flight
+        private Dictionary<(int, FlightClass), Flight> flightDictionary;   // (id,class) -> Flight
 
         public FileFlightRepository()
         {
@@ -30,7 +30,7 @@ namespace ATB.DataAccess
             return CsvUtility.ReadFlightsFromCsv(flightsFilePath);
         }
 
-        public Flight? GetFlight(int flightId, FlightClass flightClass) // returns null if the flight is not in the dictionary
+        public Flight? GetFlight(int flightId, FlightClass flightClass) // returns null if the Flight is not in the dictionary
         {
             if(flightDictionary.TryGetValue((flightId, flightClass), out Flight flight))
             {

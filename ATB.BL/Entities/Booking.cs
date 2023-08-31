@@ -2,24 +2,24 @@
 {
     internal class Booking
     {
-        public Passenger passenger { get; set; }
-        public Flight flight { get; set; }
+        public Passenger Passenger { get; set; }
+        public Flight Flight { get; set; }
         public FlightClass FClass { get; set; }
         public  DateTime ReservationDate { get; } = DateTime.Now;
-        public Booking(Flight _flight, Passenger _passenger, FlightClass fClass)
+        public Booking(Flight flight, Passenger passenger, FlightClass fClass)
         {
-            flight = _flight;
-            passenger = _passenger;
+            Flight = flight;
+            Passenger = passenger;
             FClass = fClass;
         }
 
         public override string ToString()
         {
-            return $"Passenger: {passenger}\nFlight: {flight} with Class {FClass} \n At: {ReservationDate}";
+            return $"Passenger: {Passenger}\nFlight: {Flight} with Class {FClass} \n At: {ReservationDate}";
         }
         public override bool Equals(object? obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }
@@ -27,8 +27,8 @@
             {
                 return false;
             }
-            return flight.Equals( ((Booking)obj ).flight ) &&
-                passenger.Equals( ((Booking)obj ).passenger );
+            return Flight.Equals( ((Booking)obj ).Flight ) &&
+                Passenger.Equals( ((Booking)obj ).Passenger );
         }
 
         public override int GetHashCode()

@@ -10,7 +10,7 @@ namespace ATB.DataAccess
         {
             try
             {
-                string bookingLine = $"{booking.passenger.PassengerId},{booking.flight.FlightId},{booking.FClass}";
+                string bookingLine = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}";
                 File.AppendAllLines(bookingsFilePath, new[] { bookingLine });
                 Console.WriteLine("Booking added successfully!");
             }
@@ -60,13 +60,13 @@ namespace ATB.DataAccess
         public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)
         {
             return GetAllBookings().
-                Where(booking => booking.passenger.Equals(passenger)); 
+                Where(booking => booking.Passenger.Equals(passenger)); 
         }
 
         public IEnumerable<Booking> GetPassengerBookings(int passengerId)
         {
             return GetAllBookings().
-                Where(booking => booking.passenger.PassengerId.Equals(passengerId));
+                Where(booking => booking.Passenger.PassengerId.Equals(passengerId));
         }
 
 
@@ -78,7 +78,7 @@ namespace ATB.DataAccess
                 {
                     foreach (Booking booking in bookings)
                     {
-                        string line = $"{booking.passenger.PassengerId},{booking.flight.FlightId},{booking.FClass}"; 
+                        string line = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}"; 
                         writer.WriteLine(line);
                     }
                 }
@@ -108,12 +108,12 @@ namespace ATB.DataAccess
 
             // Find the index of the booking to update
             int bookingIndex = allBookingsList.FindIndex(_booking =>
-                (_booking.passenger.PassengerId == booking.passenger.PassengerId) && (_booking.flight.FlightId == booking.flight.FlightId));
+                (_booking.Passenger.PassengerId == booking.Passenger.PassengerId) && (_booking.Flight.FlightId == booking.Flight.FlightId));
 
             if (bookingIndex != -1)
             {
-                // Update the flight class
-                allBookingsList[bookingIndex] = new Booking(booking.flight, booking.passenger, newFlightClass);
+                // Update the Flight class
+                allBookingsList[bookingIndex] = new Booking(booking.Flight, booking.Passenger, newFlightClass);
 
                 WriteBookingsIntoFile(allBookingsList);
                 Console.WriteLine("Booking modified successfully!");
