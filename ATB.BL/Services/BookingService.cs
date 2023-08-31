@@ -1,6 +1,5 @@
 ﻿using ATB.DataAccess;
 using ATB.Entities;
-
 namespace ATB.Services
 {
     internal class BookingService
@@ -43,28 +42,24 @@ namespace ATB.Services
             return _bookingRepository.GetPassengerBookings(passengerId);
 
         }
-
-        // TODO - Add checks if the passenger has already booked this flight.
+        private bool hasBookedThisFlight(Passenger passenger, Flight flight)
+        {
+            return GetAllBookings().Any(booking => booking.passenger.Equals(passenger)
+                                     && booking.flight.Equals(flight));
+        }
         public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
+            if (!hasBookedThisFlight(passenger, flight))
+            {
+                _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
+            }
         }
-        public void AddBooking(Booking booking)
-        {
-            _bookingRepository.AddBooking(booking);
-        }
-
-        // TODO - Add checks if the passenger hasn't booked this flight
-
-        public void RemoveBooking(Booking booking)
-        {
-            _bookingRepository.RemoveBooking(booking);
-
-        }
-
         public void RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
+            if (hasBookedThisFlight(passenger, flight))
+            {
+                _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
+            }
         }
 
         public void UpdateBookingClass(Booking booking, FlightClass newFlightClass)
