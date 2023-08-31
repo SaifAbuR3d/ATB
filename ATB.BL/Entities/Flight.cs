@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ATB.Entities
 {
@@ -11,7 +10,6 @@ namespace ATB.Entities
     }
     internal readonly struct Flight
     {
-        // private static int lastId = 1;
         [Required(ErrorMessage = "Flight ID is required")]
         public int FlightId { get; init; }
 
@@ -66,7 +64,6 @@ namespace ATB.Entities
 
             FlightId = flightId; 
         }
-      //  static int GenerateId() => lastId++;
         public override string ToString()
         {
             return $"FlightId = {FlightId}, Price = {Price}, DepartureCountry = {DepartureCountry}";
@@ -74,7 +71,7 @@ namespace ATB.Entities
 
         public override bool Equals(object? obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }

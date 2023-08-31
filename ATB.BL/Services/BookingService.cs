@@ -16,25 +16,21 @@ namespace ATB.Services
         {
             return _bookingRepository.GetAllBookings();
         }
-        public bool DontCare(object? obj)
-        {
-            return obj is null;
-        }
         public IEnumerable<Booking> FilterBookings(BookingSearchCriteria bookingSearchCriteria)
         {
             var allBookings = GetAllBookings();
             return allBookings
                 .Where(booking =>
-                     (booking.flight.Price.Equals(bookingSearchCriteria.Price) || DontCare(bookingSearchCriteria.Price)) &&
-                     (booking.flight.DepartureDate.Equals(bookingSearchCriteria.DepartureDate) || DontCare(bookingSearchCriteria.DepartureDate)) &&
-                     (booking.flight.FClass.Equals(bookingSearchCriteria.FClass) || DontCare(bookingSearchCriteria.FClass)) &&
-                     (booking.flight.DestinationCountry.Equals(bookingSearchCriteria.DestinationCountry) || DontCare(bookingSearchCriteria.DestinationCountry)) &&
-                     (booking.flight.ArrivalAirport.Equals(bookingSearchCriteria.ArrivalAirport) || DontCare(bookingSearchCriteria.ArrivalAirport)) &&
-                     (booking.flight.DepartureCountry.Equals(bookingSearchCriteria.DepartureCountry) || DontCare(bookingSearchCriteria.DepartureCountry)) &&
-                     (booking.flight.DepartureAirport.Equals(bookingSearchCriteria.DepartureAirport) || DontCare(bookingSearchCriteria.DepartureAirport)) &&
+                     (booking.flight.Price.Equals(bookingSearchCriteria.Price) || (bookingSearchCriteria.Price is null) ) &&
+                     (booking.flight.DepartureDate.Equals(bookingSearchCriteria.DepartureDate) || (bookingSearchCriteria.DepartureDate is null)) &&
+                     (booking.flight.FClass.Equals(bookingSearchCriteria.FClass) || (bookingSearchCriteria.FClass is null)) &&
+                     (booking.flight.DestinationCountry.Equals(bookingSearchCriteria.DestinationCountry) || (bookingSearchCriteria.DestinationCountry is null)) &&
+                     (booking.flight.ArrivalAirport.Equals(bookingSearchCriteria.ArrivalAirport) || (bookingSearchCriteria.ArrivalAirport is null)) &&
+                     (booking.flight.DepartureCountry.Equals(bookingSearchCriteria.DepartureCountry) || (bookingSearchCriteria.DepartureCountry is null)) &&
+                     (booking.flight.DepartureAirport.Equals(bookingSearchCriteria.DepartureAirport) || (bookingSearchCriteria.DepartureAirport is null)) &&
 
-                     (booking.flight.FlightId.Equals(bookingSearchCriteria.FlightId) || DontCare(bookingSearchCriteria.FlightId)) &&
-                     (booking.passenger.PassengerId.Equals(bookingSearchCriteria.PassengerId) || DontCare(bookingSearchCriteria.PassengerId))
+                     (booking.flight.FlightId.Equals(bookingSearchCriteria.FlightId) || (bookingSearchCriteria.FlightId is null)) &&
+                     (booking.passenger.PassengerId.Equals(bookingSearchCriteria.PassengerId) || (bookingSearchCriteria.PassengerId is null))
                      );
         }
         public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)

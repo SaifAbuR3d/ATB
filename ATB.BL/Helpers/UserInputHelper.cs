@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ATB.Helpers
 {
-    // can add (optional) error messages and further input (range) validation
     public static class UserInputHelper
     {
 

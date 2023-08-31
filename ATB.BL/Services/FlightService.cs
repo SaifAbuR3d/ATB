@@ -1,6 +1,5 @@
 ﻿using ATB.DataAccess;
 using ATB.Entities;
-using CsvHelper;
 
 namespace ATB.Services
 {
@@ -16,22 +15,18 @@ namespace ATB.Services
             return _flightRepository.GetAllFlights();
         }
 
-        public static bool DontCare(object? obj)
-        {
-            return obj is null;
-        }
         public IEnumerable<Flight> FilterFlights(FlightSearchCriteria flightSearchCriteria)
         { 
             var allFlights = GetAllFlights();
             return allFlights
                 .Where(flight =>
-                         ((flight.Price.Equals(flightSearchCriteria.Price)) || DontCare(flightSearchCriteria.Price)) &&
-                         ((flight.DepartureDate.Equals(flightSearchCriteria.DepartureDate)) || DontCare(flightSearchCriteria.DepartureDate)) &&
-                         ((flight.FClass.Equals(flightSearchCriteria.FClass)) || DontCare(flightSearchCriteria.FClass)) &&
-                         ((flight.DestinationCountry.Equals(flightSearchCriteria.DestinationCountry)) || DontCare(flightSearchCriteria.DestinationCountry)) &&
-                         ((flight.ArrivalAirport.Equals(flightSearchCriteria.ArrivalAirport)) || DontCare(flightSearchCriteria.ArrivalAirport)) &&
-                         ((flight.DepartureCountry.Equals(flightSearchCriteria.DepartureCountry)) || DontCare(flightSearchCriteria.DepartureCountry)) &&
-                         ((flight.DepartureAirport.Equals(flightSearchCriteria.DepartureAirport)) || DontCare(flightSearchCriteria.DepartureAirport))
+                         ((flight.Price.Equals(flightSearchCriteria.Price)) || (flightSearchCriteria.Price is null)) &&
+                         ((flight.DepartureDate.Equals(flightSearchCriteria.DepartureDate)) || (flightSearchCriteria.DepartureDate is null)) &&
+                         ((flight.FClass.Equals(flightSearchCriteria.FClass)) || (flightSearchCriteria.FClass is null)) &&
+                         ((flight.DestinationCountry.Equals(flightSearchCriteria.DestinationCountry)) || (flightSearchCriteria.DestinationCountry is null)) &&
+                         ((flight.ArrivalAirport.Equals(flightSearchCriteria.ArrivalAirport)) || (flightSearchCriteria.ArrivalAirport is null)) &&
+                         ((flight.DepartureCountry.Equals(flightSearchCriteria.DepartureCountry)) || (flightSearchCriteria.DepartureCountry is null)) &&
+                         ((flight.DepartureAirport.Equals(flightSearchCriteria.DepartureAirport)) || (flightSearchCriteria.DepartureAirport is null))
                          ); 
         }
 

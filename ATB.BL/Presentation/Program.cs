@@ -2,11 +2,6 @@
 using ATB.Entities;
 using ATB.Helpers;
 using ATB.Services;
-using CsvHelper;
-using CsvHelper.Configuration;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Reflection;
 
 namespace ATB.Presentation
 {
@@ -254,7 +249,6 @@ namespace ATB.Presentation
         }
         #endregion
          
-
         #region Passenger Methods
         private static void BookFlight(Passenger passenger)
         {
@@ -275,7 +269,7 @@ namespace ATB.Presentation
             Console.WriteLine("Booking Added Successfully.");
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        } // 
+        }  
 
         private static void SearchForFlights()
         {
@@ -284,7 +278,6 @@ namespace ATB.Presentation
 
             FlightSearchCriteria searchCriteria = GetSearchCriteriaFromPassenger();
 
-            // Call the FlightService method to search for flights based on the search criteria
             IEnumerable<Flight> foundFlights = flightService.FilterFlights(searchCriteria);
 
             if (foundFlights.Any())
@@ -308,7 +301,7 @@ namespace ATB.Presentation
 
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        } //
+        }
 
         private static FlightSearchCriteria GetSearchCriteriaFromPassenger()
         {
@@ -366,7 +359,7 @@ namespace ATB.Presentation
             }
 
             return criteria;
-        } //
+        }
 
         private static void CancelBooking(Passenger passenger)
         {
@@ -388,7 +381,7 @@ namespace ATB.Presentation
             Console.WriteLine("Booking Cancelled Successfully.");
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        } //
+        }
 
         private static void ModifyBooking(Passenger passenger) 
         {
@@ -412,7 +405,7 @@ namespace ATB.Presentation
             Console.WriteLine("Booking Updated Successfully.");
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        } //
+        }
 
         private static void ViewMyBookings(Passenger passenger)
         {
@@ -425,7 +418,7 @@ namespace ATB.Presentation
             }
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        } //
+        }
         #endregion
     }
 }

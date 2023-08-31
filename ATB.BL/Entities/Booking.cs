@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ATB.Entities
+﻿namespace ATB.Entities
 {
     internal class Booking
     {
