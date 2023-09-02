@@ -6,7 +6,7 @@ namespace ATB.DataAccess
     {
         private string flightsFilePath = "files/Flights.csv";
 
-        private Dictionary<(int, FlightClass), Flight> flightDictionary;   // (id,class) -> Flight
+        private Dictionary<(int, FlightClass), Flight> flightDictionary = new();   // (id,class) -> Flight       
 
         public FileFlightRepository()
         {
@@ -16,7 +16,7 @@ namespace ATB.DataAccess
         public void AddAllFlights(IEnumerable<Flight> flights)
         {
 
-            CsvUtility.WriteFlightsToCsv(flightsFilePath, flights);
+            CsvUtility.AppendFlightsToCsv(flightsFilePath, flights);
 
         }
 
@@ -27,7 +27,9 @@ namespace ATB.DataAccess
 
         public IEnumerable<Flight> GetAllFlights()
         {
-            return CsvUtility.ReadFlightsFromCsv(flightsFilePath);
+            //return CsvUtility.ReadFlightsFromCsv(flightsFilePath);
+
+            return flightDictionary.Values;
         }
 
         public Flight? GetFlight(int flightId, FlightClass flightClass) // returns null if the Flight is not in the dictionary

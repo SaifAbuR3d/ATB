@@ -17,16 +17,17 @@ namespace ATB.DataAccess
 
             using var streamReader = File.OpenText(csvFilePath);
             using var csvReader = new CsvReader(streamReader, csvConfig);
-            var flights = new List<Flight>();
-            int currentIndex = 1; 
+            var flightGroups = new Dictionary<int, List<Flight>>();
+
+            int currentRow = 1;
 
             while (csvReader.Read())
             {
-                var validationResult = CsvUtilityHelpers.ValidateFlightData(csvReader);
+                var validationResult = InputFlightDataValidation.ValidateFlightData(csvReader);
 
                 if (validationResult.IsValid)
                 {
-                    // the below code is safe. all fields are guaranteed Parsable
+                    // the below code is null-safe.
                     var flightId = int.Parse(csvReader.GetField(0));
                     var price = decimal.Parse(csvReader.GetField(1));
                     var departureCountry = csvReader.GetField(2);
@@ -37,26 +38,26 @@ namespace ATB.DataAccess
                     var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);
 
                     var flight = new Flight(flightId, price, departureCountry, destinationCountry, departureDate, departureAirport, arrivalAirport, fClass);
-                    flights.Add(flight);
+
+                    if (!flightGroups.ContainsKey(flightId))
+                    {
+                        flightGroups[flightId] = new List<Flight>();
+                    }
+                    flightGroups[flightId].Add(flight);
                 }
                 else
                 {
-                    CsvUtilityHelpers.PrintFlightEntityErrors(currentIndex, validationResult.Errors); 
+                    CsvUtilityHelpers.PrintFlightRowErrors(currentRow, validationResult.Errors);
                 }
-                currentIndex++;
+                currentRow++;
             }
 
-            var flightsWithThreeDifferentClasses = CsvUtilityHelpers.GetValidFlightGroups(flights);  // valid flights
+            List<Flight> flights = InputFlightDataValidation.GetConsistentFlights(flightGroups);
 
-            if (flightsWithThreeDifferentClasses.Count() != flights.Count())
-            {
-                CsvUtilityHelpers.PrintFlightsWithMissingFlightClasses(flightsWithThreeDifferentClasses, flights); 
-            }
-
-            return flightsWithThreeDifferentClasses;
+            return flights;
         }
 
-        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath) // without validation  (data is already checked valid)
+        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
@@ -84,7 +85,7 @@ namespace ATB.DataAccess
             return flights;
         }
 
-        public static void WriteFlightsToCsv(string flightsFilePath, IEnumerable<Flight> flights)
+        public static void AppendFlightsToCsv(string flightsFilePath, IEnumerable<Flight> flights)
         {
             if (flights.Count() == 0)
             {
