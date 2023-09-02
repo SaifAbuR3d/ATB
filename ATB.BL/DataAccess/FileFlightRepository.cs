@@ -19,12 +19,6 @@ namespace ATB.DataAccess
             CsvUtility.AppendFlightsToCsv(flightsFilePath, flights);
 
         }
-
-        public void AddFlight(Flight flight)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Flight> GetAllFlights()
         {
             return flightDictionary.Values;
