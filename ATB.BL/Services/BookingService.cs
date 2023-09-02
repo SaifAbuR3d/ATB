@@ -47,19 +47,23 @@ namespace ATB.Services
             return GetAllBookings().Any(booking => booking.Passenger.Equals(passenger)
                                      && booking.Flight.Equals(flight));
         }
-        public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
+        public BookingStatus AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
             if (!hasBookedThisFlight(passenger, flight))
             {
                 _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
+                return BookingStatus.Failed; 
             }
+            return BookingStatus.Success; 
         }
-        public void RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
+        public BookingStatus RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
             if (hasBookedThisFlight(passenger, flight))
             {
                 _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
+                return BookingStatus.Failed;
             }
+            return BookingStatus.Success;
         }
 
         public void UpdateBookingClass(Booking booking, FlightClass newFlightClass)
