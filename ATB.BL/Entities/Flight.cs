@@ -2,12 +2,6 @@
 
 namespace ATB.Entities
 {
-    internal enum FlightClass
-    {
-        Economy,
-        Business,
-        FirstClass
-    }
     internal readonly struct Flight
     {
         [Required(ErrorMessage = "Flight ID is required")]

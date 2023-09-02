@@ -31,7 +31,7 @@ internal static class CsvUtilityHelpers
     internal static FlightValidationResult ValidateFlightData(CsvReader csvReader)
     {
         FlightValidationResult validationResult = new FlightValidationResult();
-        // Validate flightId uniqueness  ---- TODO check the uniqueness using the dictionary for better performance
+
         var existingFlights = CsvUtility.ReadFlightsFromCsv("files/Flights.csv");
 
         if (int.TryParse(csvReader.GetField(0), out int flightId))

@@ -7,13 +7,13 @@ namespace ATB.Presentation
 {
     internal class Program  // TODO - Consistency check for flights when added from csv, 3 flights with the same flightId must have same data (with different classes) 
     {  
-        static IFlightRepository flightRepository = new FileFlightRepository();
-        static FlightService flightService = new FlightService(flightRepository);
+        static readonly IFlightRepository flightRepository = new FileFlightRepository();
+        static readonly FlightService flightService = new FlightService(flightRepository);
 
-        static IBookingRepository bookingRepository = new FileBookingRepository();
-        static BookingService bookingService = new BookingService(bookingRepository);
+        static readonly IBookingRepository bookingRepository = new FileBookingRepository();
+        static readonly BookingService bookingService = new BookingService(bookingRepository);
 
-        static IPassengerRepository passengerRepository = new FilePassengerRepository();
+        static readonly IPassengerRepository passengerRepository = new FilePassengerRepository();
         static void Main()
         {
             RunMainMenu();
@@ -41,7 +41,8 @@ namespace ATB.Presentation
                         break;
                     case "3":
                         Console.WriteLine("Exiting the application. Goodbye!");
-                        return; 
+                        Environment.Exit(0);
+                        break;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;

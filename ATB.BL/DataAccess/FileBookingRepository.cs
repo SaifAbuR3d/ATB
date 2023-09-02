@@ -44,9 +44,9 @@ namespace ATB.DataAccess
                         int flightId = int.Parse(values[1]);
                         Passenger? passenger = passengerRepository.GetPassenger(passengerId);
                         FlightClass flightClass = Enum.Parse<FlightClass>(values[2], true); // true to ignore case
-                        Flight? flight = flightService.GetFlight(flightId, flightClass); ///////////////////////////////////////////////// 
+                        Flight? flight = flightService.GetFlight(flightId, flightClass);
                         
-                        allBookings.Add(new Booking((Flight)flight, passenger, flightClass)); /////////////////////////////////////
+                        allBookings.Add(new Booking((Flight)flight, passenger, flightClass));
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace ATB.DataAccess
             // Contains All Bookings Except For (booking)
             IEnumerable<Booking> updatedList = GetAllBookings().Where(_booking => !_booking.Equals(booking));
 
-            // replace the contents of bookings.txt with the new list 
+            // Replace the contents of bookings.txt with the new list 
             WriteBookingsIntoFile(updatedList);
         }
         public void RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
@@ -112,7 +112,6 @@ namespace ATB.DataAccess
 
             if (bookingIndex != -1)
             {
-                // Update the Flight class
                 allBookingsList[bookingIndex] = new Booking(booking.Flight, booking.Passenger, newFlightClass);
 
                 WriteBookingsIntoFile(allBookingsList);
