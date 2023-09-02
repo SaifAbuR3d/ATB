@@ -21,7 +21,7 @@ namespace ATB.Helpers
                     {
                         if (validationAttribute is DataTypeAttribute dataTypeAttribute)
                         {
-                            Console.WriteLine($"    - {dataTypeAttribute.DataType.ToString()}");
+                            Console.WriteLine($"    - {dataTypeAttribute.DataType}");
                         }
                         else if (validationAttribute is RequiredAttribute)
                         {

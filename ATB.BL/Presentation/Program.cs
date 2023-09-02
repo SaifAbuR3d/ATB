@@ -110,7 +110,8 @@ namespace ATB.Presentation
                 Console.WriteLine("------------");
                 Console.WriteLine("1. Filter Bookings");
                 Console.WriteLine("2. Import Flights from CSV");
-                Console.WriteLine("3. Go Back");
+                Console.WriteLine("3. Show Validation details For Flights"); 
+                Console.WriteLine("4. Go Back");
                 string managerChoice = UserInputHelper.GetValidString("Enter your choice: ");
 
                 switch (managerChoice)
@@ -122,6 +123,9 @@ namespace ATB.Presentation
                         ImportFlightsFromCSV(); 
                         break;
                     case "3":
+                        ShowValidationDetails(typeof(Flight));
+                        break; 
+                    case "4":
                         RunMainMenu();
                         return;
                     default:
@@ -248,8 +252,15 @@ namespace ATB.Presentation
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
+        private static void ShowValidationDetails(Type type)
+        {
+            ValidationDetailsHelper.DisplayValidationDetails(type);
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
         #endregion
-         
+
         #region Passenger Methods
         private static void BookFlight(Passenger passenger)
         {
