@@ -27,8 +27,6 @@ namespace ATB.DataAccess
 
         public IEnumerable<Flight> GetAllFlights()
         {
-            //return CsvUtility.ReadFlightsFromCsv(flightsFilePath);
-
             return flightDictionary.Values;
         }
 

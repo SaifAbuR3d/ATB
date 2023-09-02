@@ -5,7 +5,7 @@ using ATB.Services;
 
 namespace ATB.Presentation
 {
-    internal class Program  // TODO - Consistency check for flights when added from csv, 3 flights with the same flightId must have same data (with different classes) 
+    internal class Program 
     {  
         static readonly IFlightRepository flightRepository = new FileFlightRepository();
         static readonly FlightService flightService = new FlightService(flightRepository);

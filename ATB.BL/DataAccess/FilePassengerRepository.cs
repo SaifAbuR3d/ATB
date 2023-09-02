@@ -15,7 +15,7 @@ namespace ATB.DataAccess
         }
 
 
-        public Passenger? GetPassenger(int passengerId) // returns null if the Passenger is not in the dictionary
+        public Passenger? GetPassenger(int passengerId)
         {
             if (passengerDictionary.TryGetValue((passengerId), out Passenger passenger))
             {
