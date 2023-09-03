@@ -1,6 +1,8 @@
 ﻿namespace ATB.Entities
 {
-    internal class Manger : User
+
+    [Obsolete]
+    public class Manger
     {
         public string ManagerId { get; set; }
         public string ManagerName { get; set; }
