@@ -3,7 +3,7 @@ using ATB.Entities;
 
 namespace ATB.Services
 {
-    internal class FlightService
+    public class FlightService
     {
         private readonly IFlightRepository _flightRepository;
         public FlightService(IFlightRepository flightRepository)

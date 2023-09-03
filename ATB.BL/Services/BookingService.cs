@@ -2,7 +2,7 @@
 using ATB.Entities;
 namespace ATB.Services
 {
-    internal class BookingService
+    public class BookingService
     {
         private readonly IBookingRepository _bookingRepository;
 
@@ -20,7 +20,7 @@ namespace ATB.Services
             var allBookings = GetAllBookings();
             return allBookings
                 .Where(booking =>
-                     (booking.Flight.Price.Equals(bookingSearchCriteria.Price) || (bookingSearchCriteria.Price is null) ) &&
+                     (booking.Flight.Price.Equals(bookingSearchCriteria.Price) || (bookingSearchCriteria.Price is null)) &&
                      (booking.Flight.DepartureDate.Equals(bookingSearchCriteria.DepartureDate) || (bookingSearchCriteria.DepartureDate is null)) &&
                      (booking.Flight.FClass.Equals(bookingSearchCriteria.FClass) || (bookingSearchCriteria.FClass is null)) &&
                      (booking.Flight.DestinationCountry.Equals(bookingSearchCriteria.DestinationCountry) || (bookingSearchCriteria.DestinationCountry is null)) &&
@@ -34,46 +34,50 @@ namespace ATB.Services
         }
         public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)
         {
-            return _bookingRepository.GetPassengerBookings(passenger);
-
+            return GetAllBookings().
+                Where(booking => booking.Passenger.Equals(passenger));
         }
         public IEnumerable<Booking> GetPassengerBookings(int passengerId)
         {
-            return _bookingRepository.GetPassengerBookings(passengerId);
-
+            return GetAllBookings().
+                Where(booking => booking.Passenger.PassengerId.Equals(passengerId));
         }
-        private bool hasBookedThisFlight(Passenger passenger, Flight flight)
+        private bool HasAlreadyBookedThisFlight(Passenger passenger, Flight flight)
         {
             return GetAllBookings().Any(booking => booking.Passenger.Equals(passenger)
-                                     && booking.Flight.Equals(flight));
+                                                && booking.Flight.Equals(flight));
         }
-        public BookingStatus AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
+        public BookingOperationStatus AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            if (!hasBookedThisFlight(passenger, flight))
+            if (!HasAlreadyBookedThisFlight(passenger, flight))
             {
                 _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
-                return BookingStatus.Failed; 
+                return BookingOperationStatus.Success;
             }
-            return BookingStatus.Success; 
+            return BookingOperationStatus.Failed;
         }
-        public BookingStatus RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
+        public BookingOperationStatus RemoveBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
-            if (hasBookedThisFlight(passenger, flight))
+            if (HasAlreadyBookedThisFlight(passenger, flight))
             {
                 _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
-                return BookingStatus.Failed;
+                return BookingOperationStatus.Success;
             }
-            return BookingStatus.Success;
+            return BookingOperationStatus.Failed;
+        }
+        public BookingOperationStatus UpdateBookingClass(Booking booking, FlightClass newFlightClass)
+        {
+            if (HasAlreadyBookedThisFlight(booking.Passenger, booking.Flight))
+            {
+                _bookingRepository.UpdateBookingClass(booking, newFlightClass);
+                return BookingOperationStatus.Success; 
+            }
+            return BookingOperationStatus.Failed; 
         }
 
-        public void UpdateBookingClass(Booking booking, FlightClass newFlightClass)
+        public BookingOperationStatus UpdateBookingClass(Passenger passenger, Flight flight, FlightClass flightClass, FlightClass newFlightClass)
         {
-            _bookingRepository.UpdateBookingClass(booking, newFlightClass);
-        }
-
-        public void UpdateBookingClass(Passenger passenger, Flight flight, FlightClass flightClass, FlightClass newFlightClass)
-        {
-            UpdateBookingClass(new Booking(flight, passenger, flightClass), newFlightClass); 
+            return UpdateBookingClass(new Booking(flight, passenger, flightClass), newFlightClass);
         }
     }
 }
