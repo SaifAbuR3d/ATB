@@ -198,7 +198,7 @@ namespace ATB.Presentation
             }
 
             Console.Write("Enter Departure Date (yyyy-MM-dd) (or press Enter to skip): ");
-            if (DateOnly.TryParse(Console.ReadLine(), out DateOnly departureDate))
+            if (DateTime.TryParse(Console.ReadLine(), out DateTime departureDate))
             {
                 criteria.DepartureDate = departureDate;
             }
@@ -343,7 +343,7 @@ namespace ATB.Presentation
             }
 
             Console.Write("Enter Departure Date (yyyy-MM-dd) (or press Enter to skip): ");
-            if (DateOnly.TryParse(Console.ReadLine(), out DateOnly departureDate))
+            if (DateTime.TryParse(Console.ReadLine(), out DateTime departureDate))
             {
                 criteria.DepartureDate = departureDate;
             }
@@ -406,14 +406,21 @@ namespace ATB.Presentation
             Flight? flight = flightService.GetFlight(flightId, flightClass);
             if (flight is null)
             {
-                Console.WriteLine("You Didn't book this Flight. Returning...");
+                Console.WriteLine("There is No such a flight. Returning...");
                 Thread.Sleep(2000);
                 return;
             }
 
             FlightClass newFlightClass = UserInputHelper.GetValidFlightClass("Enter the new Flight Class: ", "Invalid Flight Class: Must be one of the following (Economy, Business, FirstClass)");
 
-            bookingService.UpdateBookingClass(passenger, (Flight)flight, flightClass, newFlightClass);
+            var status = bookingService.UpdateBookingClass(passenger, (Flight)flight, flightClass, newFlightClass);
+            if (status == BookingOperationStatus.Failed)
+            {
+                Console.WriteLine("You Didn't book this Flight. Returning...");
+                Thread.Sleep(2000);
+                return;
+            }
+
             Console.WriteLine("Booking Updated Successfully.");
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
