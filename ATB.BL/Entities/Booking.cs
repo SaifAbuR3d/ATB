@@ -1,11 +1,11 @@
 ﻿namespace ATB.Entities
 {
-    internal class Booking
+    public class Booking
     {
         public Passenger Passenger { get; set; }
         public Flight Flight { get; set; }
         public FlightClass FClass { get; set; }
-        public  DateTime ReservationDate { get; } = DateTime.Now;
+        public  DateTime ReservationDate { get; set; }
         public Booking(Flight flight, Passenger passenger, FlightClass fClass)
         {
             Flight = flight;

@@ -32,7 +32,7 @@ namespace ATB.DataAccess
                     var price = decimal.Parse(csvReader.GetField(1));
                     var departureCountry = csvReader.GetField(2);
                     var destinationCountry = csvReader.GetField(3);
-                    var departureDate = DateOnly.Parse(csvReader.GetField(4));
+                    var departureDate = DateTime.Parse(csvReader.GetField(4));
                     var departureAirport = csvReader.GetField(5);
                     var arrivalAirport = csvReader.GetField(6);
                     var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);
@@ -74,7 +74,7 @@ namespace ATB.DataAccess
                 var price = decimal.Parse(csvReader.GetField(1));
                 var departureCountry = csvReader.GetField(2);
                 var destinationCountry = csvReader.GetField(3);
-                var departureDate = DateOnly.Parse(csvReader.GetField(4));
+                var departureDate = DateTime.Parse(csvReader.GetField(4));
                 var DepartureAirport = csvReader.GetField(5);
                 var arrivalAirport = csvReader.GetField(6);
                 var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);

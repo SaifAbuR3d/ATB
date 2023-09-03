@@ -2,7 +2,7 @@
 
 namespace ATB.Entities
 {
-    internal readonly struct Flight
+    public readonly struct Flight
     {
         [Required(ErrorMessage = "Flight ID is required")]
         public int FlightId { get; init; }
@@ -27,8 +27,7 @@ namespace ATB.Entities
 
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Departure date is required")]
-        [Range(typeof(DateTime),"today", "future", ErrorMessage = "Allowed Range: today → future")]
-        public DateOnly DepartureDate { get; init; }
+        public DateTime DepartureDate { get; init; }
 
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Departure airport is required")]
@@ -46,7 +45,7 @@ namespace ATB.Entities
         [Required(ErrorMessage = "FlightClass is required")]
         public FlightClass FClass { get; init; }
 
-        public Flight(int flightId, decimal price, string departureCountry, string destinationCountry, DateOnly departureDate, string departureAirport, string arrivalAirport, FlightClass fClass)
+        public Flight(int flightId, decimal price, string departureCountry, string destinationCountry, DateTime departureDate, string departureAirport, string arrivalAirport, FlightClass fClass)
         {
             Price = price;
             DepartureCountry = departureCountry ?? throw new ArgumentNullException(nameof(departureCountry));

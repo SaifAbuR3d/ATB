@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATB.Entities
 {
-    public enum BookingStatus
+    public enum BookingOperationStatus
     {
         Success, 
         Failed

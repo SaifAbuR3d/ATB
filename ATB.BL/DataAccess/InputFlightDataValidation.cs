@@ -36,9 +36,9 @@ internal static class InputFlightDataValidation
             validationResult.Errors.Add($"Invalid arrival airport \"{csvReader.GetField(6) ?? String.Empty}\": Must be non-empty alphabetical string with at most 20 characters");
         }
 
-        var now = DateOnly.FromDateTime(DateTime.Now);
+        var now = DateTime.Now;
         var oneYearFromNow = now.AddYears(1);
-        if (!DateOnly.TryParse(csvReader.GetField(4), out DateOnly departureDate) || departureDate < now || departureDate > oneYearFromNow)
+        if (!DateTime.TryParse(csvReader.GetField(4), out DateTime departureDate) || departureDate < now || departureDate > oneYearFromNow)
         {
             validationResult.Errors.Add($"Invalid departure date \"{csvReader.GetField(4)}\": Must be in range ({now} to {oneYearFromNow})");
         }

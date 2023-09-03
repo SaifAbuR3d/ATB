@@ -57,19 +57,6 @@ namespace ATB.DataAccess
 
             return allBookings;
         }
-        public IEnumerable<Booking> GetPassengerBookings(Passenger passenger)
-        {
-            return GetAllBookings().
-                Where(booking => booking.Passenger.Equals(passenger)); 
-        }
-
-        public IEnumerable<Booking> GetPassengerBookings(int passengerId)
-        {
-            return GetAllBookings().
-                Where(booking => booking.Passenger.PassengerId.Equals(passengerId));
-        }
-
-
         private void WriteBookingsIntoFile(IEnumerable<Booking> bookings) // OVERWRITES Existing Lines
         {
             try

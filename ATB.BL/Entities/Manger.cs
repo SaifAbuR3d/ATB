@@ -2,7 +2,7 @@
 {
 
     [Obsolete]
-    internal class Manger
+    public class Manger
     {
         public string ManagerId { get; set; }
         public string ManagerName { get; set; }

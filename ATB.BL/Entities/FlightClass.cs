@@ -1,6 +1,6 @@
 ﻿namespace ATB.Entities
 {
-    internal enum FlightClass
+    public enum FlightClass
     {
         Economy,
         Business,
