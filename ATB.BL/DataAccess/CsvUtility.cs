@@ -57,34 +57,6 @@ namespace ATB.DataAccess
             return flights;
         }
 
-        public static IEnumerable<Flight> ReadFlightsFromCsv(string csvFilePath)
-        {
-            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
-            {
-                HasHeaderRecord = false
-            };
-
-            using var streamReader = File.OpenText(csvFilePath);
-            using var csvReader = new CsvReader(streamReader, csvConfig);
-            var flights = new List<Flight>();
-
-            while (csvReader.Read())
-            {
-                var flightId = int.Parse(csvReader.GetField(0));
-                var price = decimal.Parse(csvReader.GetField(1));
-                var departureCountry = csvReader.GetField(2);
-                var destinationCountry = csvReader.GetField(3);
-                var departureDate = DateTime.Parse(csvReader.GetField(4));
-                var DepartureAirport = csvReader.GetField(5);
-                var arrivalAirport = csvReader.GetField(6);
-                var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);
-
-                Flight flight = new Flight(flightId, price, departureCountry, destinationCountry, departureDate, DepartureAirport, arrivalAirport, fClass);
-                flights.Add(flight);
-            }
-            return flights;
-        }
-
         public static void AppendFlightsToCsv(string flightsFilePath, IEnumerable<Flight> flights)
         {
             if (flights.Count() == 0)

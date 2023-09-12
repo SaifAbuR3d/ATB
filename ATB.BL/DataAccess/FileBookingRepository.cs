@@ -19,6 +19,10 @@ namespace ATB.DataAccess
                 Console.WriteLine($"An error occurred while adding the booking: {ex.Message}");
             }
         }
+        public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
+        {
+            AddBooking(new Booking(flight, passenger, flightClass));
+        }
 
 
 
@@ -34,7 +38,7 @@ namespace ATB.DataAccess
             try
             {
                 string[] lines = File.ReadAllLines(bookingsFilePath);
-
+                  
                 foreach (string line in lines)
                 {
                     string[] values = line.Split(',');
@@ -108,12 +112,6 @@ namespace ATB.DataAccess
             {
                 Console.WriteLine("the Booking was not found for modification.");
             }
-        }
-
-
-        public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
-        {
-            AddBooking(new Booking(flight, passenger, flightClass)); 
         }
     }
 }
