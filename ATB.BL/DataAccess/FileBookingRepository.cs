@@ -10,7 +10,7 @@ namespace ATB.DataAccess
         {
             try
             {
-                string bookingLine = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}";
+                var bookingLine = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}";
                 File.AppendAllLines(bookingsFilePath, new[] { bookingLine });
                 Console.WriteLine("Booking added successfully!");
             }
@@ -29,11 +29,11 @@ namespace ATB.DataAccess
         public IEnumerable<Booking> GetAllBookings()
         {
             IFlightRepository flightRepository = new FileFlightRepository();
-            FlightService flightService = new FlightService(flightRepository);
+            var flightService = new FlightService(flightRepository);
 
             IPassengerRepository passengerRepository = new FilePassengerRepository();
 
-            List<Booking> allBookings = new List<Booking>();
+            var allBookings = new List<Booking>();
 
             try
             {
@@ -45,10 +45,10 @@ namespace ATB.DataAccess
 
                     if (values.Length >= 3 && int.TryParse(values[0], out int passengerId))
                     {
-                        int flightId = int.Parse(values[1]);
-                        Passenger? passenger = passengerRepository.GetPassenger(passengerId);
-                        FlightClass flightClass = Enum.Parse<FlightClass>(values[2], true); // true to ignore case
-                        Flight? flight = flightService.GetFlight(flightId, flightClass);
+                        var flightId = int.Parse(values[1]);
+                        var passenger = passengerRepository.GetPassenger(passengerId);
+                        var flightClass = Enum.Parse<FlightClass>(values[2], true); // true to ignore case
+                        var flight = flightService.GetFlight(flightId, flightClass);
                         
                         allBookings.Add(new Booking((Flight)flight, passenger, flightClass));
                     }
@@ -67,9 +67,9 @@ namespace ATB.DataAccess
             {
                 using (StreamWriter writer = new StreamWriter(bookingsFilePath, false)) // Open the file in write mode, which overwrites existing content
                 {
-                    foreach (Booking booking in bookings)
+                    foreach (var booking in bookings)
                     {
-                        string line = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}"; 
+                        var line = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}"; 
                         writer.WriteLine(line);
                     }
                 }
@@ -98,7 +98,7 @@ namespace ATB.DataAccess
             var allBookingsList = GetAllBookings().ToList();
 
             // Find the index of the booking to update
-            int bookingIndex = allBookingsList.FindIndex(_booking =>
+            var bookingIndex = allBookingsList.FindIndex(_booking =>
                 (_booking.Passenger.PassengerId == booking.Passenger.PassengerId) && (_booking.Flight.FlightId == booking.Flight.FlightId));
 
             if (bookingIndex != -1)

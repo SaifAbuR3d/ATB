@@ -44,7 +44,7 @@ namespace ATB.DataAccess
                 foreach (string line in lines)
                 {
                     string[] values = line.Split(',');
-                    Flight flight = FlightParser.ParseFlightFromStrings(values);
+                    var flight = FlightParser.ParseFlightFromStrings(values);
                     flightDictionary[(flight.FlightId, flight.FClass)] = flight;
                 }
             }

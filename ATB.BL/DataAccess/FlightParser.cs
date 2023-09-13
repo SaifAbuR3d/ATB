@@ -19,14 +19,14 @@ public class FlightParser
 
     public static Flight ParseFlightFromStrings(string[] values)
     {
-        int id = int.Parse(values[0]);
-        decimal price = decimal.Parse(values[1]);
-        string departureCountry = values[2];
-        string destinationCountry = values[3];
-        DateTime departureDate = DateTime.Parse(values[4]);
-        string departureAirport = values[5];
-        string arrivalAirport = values[6];
-        FlightClass fClass = Enum.Parse<FlightClass>(values[7], true);
+        var id = int.Parse(values[0]);
+        var price = decimal.Parse(values[1]);
+        var departureCountry = values[2];
+        var destinationCountry = values[3];
+        var departureDate = DateTime.Parse(values[4]);
+        var departureAirport = values[5];
+        var arrivalAirport = values[6];
+        var fClass = Enum.Parse<FlightClass>(values[7], true);
 
         return new Flight
         {

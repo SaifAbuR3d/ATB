@@ -15,7 +15,7 @@ namespace ATB.DataAccess
 
             var flightGroups = new Dictionary<int, List<Flight>>();
 
-            int currentRow = 1;
+            var currentRow = 1;
 
             while (csvReader.Read())
             {
@@ -39,7 +39,7 @@ namespace ATB.DataAccess
                 currentRow++;
             }
 
-            List<Flight> flights = InputFlightDataValidation.GetConsistentFlights(flightGroups);
+            var flights = InputFlightDataValidation.GetConsistentFlights(flightGroups);
 
             return flights;
         }
@@ -56,7 +56,7 @@ namespace ATB.DataAccess
                 {
                     foreach (Flight flight in flights)
                     {
-                        string flightLine = flight.GetFlightLine();
+                        var flightLine = flight.GetFlightLine();
 
                         writer.WriteLine(flightLine);
                     }
