@@ -23,7 +23,7 @@ namespace ATB.DataAccess
 
                 if (validationResult.IsValid)
                 {
-                    var flight = FlightParser.ParseFlightFromCsv(csvReader);
+                    var flight = FlightParser.ParseFlightFromCsvReader(csvReader);
                     var flightId = flight.FlightId; 
 
                     if (!flightGroups.ContainsKey(flightId))

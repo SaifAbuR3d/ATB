@@ -43,29 +43,8 @@ namespace ATB.DataAccess
                 foreach (string line in lines)
                 {
                     string[] values = line.Split(',');
-
-                    if (values.Length >= 8 && int.TryParse(values[0], out int id))
-                    {
-                        decimal price = decimal.Parse(values[1]);
-                        string departureCountry = values[2];
-                        string destinationCountry = values[3];
-                        DateTime departureDate = DateTime.Parse(values[4]);
-                        string departureAirport = values[5];
-                        string arrivalAirport = values[6];
-                        FlightClass fClass = Enum.Parse<FlightClass>(values[7],true); // true to ignore case 
-
-                        flightDictionary[(id, fClass)] = new Flight
-                        {
-                            FlightId = id,
-                            Price = price,
-                            DepartureCountry = departureCountry,
-                            DestinationCountry = destinationCountry,
-                            DepartureDate = departureDate,
-                            DepartureAirport = departureAirport,
-                            ArrivalAirport = arrivalAirport,
-                            FClass = fClass
-                        };
-                    }
+                    Flight flight = FlightParser.ParseFlightFromStrings(values);
+                    flightDictionary[(flight.FlightId, flight.FClass)] = flight;
                 }
             }
             catch (IOException ex)
