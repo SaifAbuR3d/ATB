@@ -11,7 +11,7 @@ namespace ATB.DataAccess
         public static IEnumerable<Flight> ParseFlightsFromCsv(string csvFilePath)
         {
 
-            using var csvReader = CsvReaderFactory.CreateCsvReader(csvFilePath, false); 
+            using var csvReader = CsvReaderFactory.CreateCsvReader(csvFilePath, false);
 
             var flightGroups = new Dictionary<int, List<Flight>>();
 
@@ -24,7 +24,7 @@ namespace ATB.DataAccess
                 if (validationResult.IsValid)
                 {
                     var flight = FlightParser.ParseFlightFromCsvReader(csvReader);
-                    var flightId = flight.FlightId; 
+                    var flightId = flight.FlightId;
 
                     if (!flightGroups.ContainsKey(flightId))
                     {
@@ -48,25 +48,18 @@ namespace ATB.DataAccess
         {
             if (flights.Count() == 0)
             {
-                return; 
+                return;
             }
-            try 
+            using (StreamWriter writer = new StreamWriter(flightsFilePath, true, Encoding.UTF8))  // append the flights to file
             {
-                using (StreamWriter writer = new StreamWriter(flightsFilePath, true, Encoding.UTF8))  // append the flights to file
+                foreach (Flight flight in flights)
                 {
-                    foreach (Flight flight in flights)
-                    {
-                        var flightLine = flight.GetFlightLine();
+                    var flightLine = flight.GetFlightLine();
 
-                        writer.WriteLine(flightLine);
-                    }
-
-                    Console.WriteLine("Flights added successfully!");
+                    writer.WriteLine(flightLine);
                 }
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"An error occurred while writing flights to the file: {ex.Message}");
+
+                Console.WriteLine("Flights added successfully!");
             }
         }
     }

@@ -15,10 +15,9 @@ namespace ATB.DataAccess
 
         public void AddAllFlights(IEnumerable<Flight> flights)
         {
-
             CsvUtility.AppendFlightsToCsv(flightsFilePath, flights);
-
         }
+
         public IEnumerable<Flight> GetAllFlights()
         {
             return flightDictionary.Values;
@@ -33,6 +32,7 @@ namespace ATB.DataAccess
             }
             return null; 
         }
+
         private void InitializeFlightDictionary()
         {
             flightDictionary = new Dictionary<(int, FlightClass), Flight>();

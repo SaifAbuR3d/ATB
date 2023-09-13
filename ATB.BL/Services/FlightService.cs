@@ -12,7 +12,16 @@ namespace ATB.Services
         }
         public IEnumerable<Flight> GetAllFlights()
         {
-            return _flightRepository.GetAllFlights();
+            try
+            {
+                return _flightRepository.GetAllFlights();
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while getting the flights: {ex.Message}");
+                return new List<Flight>();
+            }
+
         }
 
         /// <summary>
@@ -50,15 +59,28 @@ namespace ATB.Services
 
         public void ImportFlightsFromCsv(string csvFilePath)
         {
-            List<Flight> flights = CsvUtility.ParseFlightsFromCsv(csvFilePath).ToList();
-            _flightRepository.AddAllFlights(flights);
+            try
+            {
+                List<Flight> flights = CsvUtility.ParseFlightsFromCsv(csvFilePath).ToList();
+                _flightRepository.AddAllFlights(flights);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while importing the flights: {ex.Message}");
+            }
         }
 
         public Flight? GetFlight(int flightId, FlightClass flightClass)
         {
-            return _flightRepository.GetFlight(flightId, flightClass);
+            try
+            {
+                return _flightRepository.GetFlight(flightId, flightClass);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while getting the flight: {ex.Message}");
+                return null; 
+            }
         }
-
-
     }
 }
