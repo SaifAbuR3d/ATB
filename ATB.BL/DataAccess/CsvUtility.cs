@@ -10,13 +10,9 @@ namespace ATB.DataAccess
     {
         public static IEnumerable<Flight> ParseFlightsFromCsv(string csvFilePath)
         {
-            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
-            {
-                HasHeaderRecord = false
-            };
 
-            using var streamReader = File.OpenText(csvFilePath);
-            using var csvReader = new CsvReader(streamReader, csvConfig);
+            using var csvReader = CsvReaderFactory.CreateCsvReader(csvFilePath, false); 
+
             var flightGroups = new Dictionary<int, List<Flight>>();
 
             int currentRow = 1;
@@ -27,17 +23,8 @@ namespace ATB.DataAccess
 
                 if (validationResult.IsValid)
                 {
-                    // the below code is null-safe.
-                    var flightId = int.Parse(csvReader.GetField(0));
-                    var price = decimal.Parse(csvReader.GetField(1));
-                    var departureCountry = csvReader.GetField(2);
-                    var destinationCountry = csvReader.GetField(3);
-                    var departureDate = DateTime.Parse(csvReader.GetField(4));
-                    var departureAirport = csvReader.GetField(5);
-                    var arrivalAirport = csvReader.GetField(6);
-                    var fClass = Enum.Parse<FlightClass>(csvReader.GetField(7), true);
-
-                    var flight = new Flight(flightId, price, departureCountry, destinationCountry, departureDate, departureAirport, arrivalAirport, fClass);
+                    var flight = FlightParser.ParseFlightFromCsv(csvReader);
+                    var flightId = flight.FlightId; 
 
                     if (!flightGroups.ContainsKey(flightId))
                     {
