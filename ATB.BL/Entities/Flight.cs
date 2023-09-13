@@ -57,6 +57,13 @@ namespace ATB.Entities
 
             FlightId = flightId; 
         }
+
+        public string GetFlightLine()
+        {
+            return $"{FlightId},{Price},{DepartureCountry},{DestinationCountry}," +
+                   $"{DepartureDate},{DepartureAirport},{ArrivalAirport},{FClass}";
+        }
+
         public override string ToString()
         {
             return $"FlightId = {FlightId}, Price = {Price}, DepartureCountry = {DepartureCountry}";
@@ -75,9 +82,5 @@ namespace ATB.Entities
             return FlightId.Equals( ((Flight)obj ).FlightId)  &&  FClass.Equals(((Flight)obj).FClass); 
         }
 
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

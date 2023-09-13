@@ -56,8 +56,7 @@ namespace ATB.DataAccess
                 {
                     foreach (Flight flight in flights)
                     {
-                        string flightLine = $"{flight.FlightId},{flight.Price},{flight.DepartureCountry},{flight.DestinationCountry}," +
-                                            $"{flight.DepartureDate},{flight.DepartureAirport},{flight.ArrivalAirport},{flight.FClass}";
+                        string flightLine = flight.GetFlightLine();
 
                         writer.WriteLine(flightLine);
                     }
