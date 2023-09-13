@@ -15,19 +15,37 @@ namespace ATB.Services
             return _flightRepository.GetAllFlights();
         }
 
+        /// <summary>
+        /// Filters the collection of flights based on the specified search criteria.
+        /// </summary>
+        /// <param name="flightSearchCriteria">The criteria to filter flights.</param>
+        /// <returns>
+        /// An IEnumerable of <see cref="Flight"/> objects that match the search criteria.
+        /// </returns>
         public IEnumerable<Flight> FilterFlights(FlightSearchCriteria flightSearchCriteria)
         { 
             var allFlights = GetAllFlights();
-            return allFlights
-                .Where(flight =>
-                         ((flight.Price.Equals(flightSearchCriteria.Price)) || (flightSearchCriteria.Price is null)) &&
-                         ((flight.DepartureDate.Equals(flightSearchCriteria.DepartureDate)) || (flightSearchCriteria.DepartureDate is null)) &&
-                         ((flight.FClass.Equals(flightSearchCriteria.FClass)) || (flightSearchCriteria.FClass is null)) &&
-                         ((flight.DestinationCountry.Equals(flightSearchCriteria.DestinationCountry)) || (flightSearchCriteria.DestinationCountry is null)) &&
-                         ((flight.ArrivalAirport.Equals(flightSearchCriteria.ArrivalAirport)) || (flightSearchCriteria.ArrivalAirport is null)) &&
-                         ((flight.DepartureCountry.Equals(flightSearchCriteria.DepartureCountry)) || (flightSearchCriteria.DepartureCountry is null)) &&
-                         ((flight.DepartureAirport.Equals(flightSearchCriteria.DepartureAirport)) || (flightSearchCriteria.DepartureAirport is null))
-                         ); 
+
+            bool IsNotSpecified<T>(T value) => value == null;
+
+            bool FilterPredicate(Flight flight)
+            {
+                bool IsPriceMatch = flight.Price == flightSearchCriteria.Price || IsNotSpecified(flightSearchCriteria.Price);
+                bool IsDepartureDateMatch = flight.DepartureDate == flightSearchCriteria.DepartureDate || IsNotSpecified(flightSearchCriteria.DepartureDate);
+                bool IsFClassMatch = flight.FClass == flightSearchCriteria.FClass || IsNotSpecified(flightSearchCriteria.FClass);
+                bool IsDestinationCountryMatch = flight.DestinationCountry == flightSearchCriteria.DestinationCountry || IsNotSpecified(flightSearchCriteria.DestinationCountry);
+                bool IsArrivalAirportMatch = flight.ArrivalAirport == flightSearchCriteria.ArrivalAirport || IsNotSpecified(flightSearchCriteria.ArrivalAirport);
+                bool IsDepartureCountryMatch = flight.DepartureCountry == flightSearchCriteria.DepartureCountry || IsNotSpecified(flightSearchCriteria.DepartureCountry);
+                bool IsDepartureAirportMatch = flight.DepartureAirport == flightSearchCriteria.DepartureAirport || IsNotSpecified(flightSearchCriteria.DepartureAirport);
+
+                return IsPriceMatch && IsDepartureDateMatch && IsFClassMatch &&
+                       IsDestinationCountryMatch && IsArrivalAirportMatch &&
+                       IsDepartureCountryMatch && IsDepartureAirportMatch;
+            }
+
+            var filteredFlights = allFlights.Where(FilterPredicate);
+
+            return filteredFlights;
         }
 
         public void ImportFlightsFromCsv(string csvFilePath)
