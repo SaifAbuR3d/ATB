@@ -24,7 +24,8 @@ namespace ATB.DataAccess
             return flightDictionary.Values;
         }
 
-        public Flight? GetFlight(int flightId, FlightClass flightClass) // returns null if the Flight is not in the dictionary
+        ///   <returns>null if the Flight is not in the dictionary</returns>
+        public Flight? GetFlight(int flightId, FlightClass flightClass)
         {
             if(flightDictionary.TryGetValue((flightId, flightClass), out Flight flight))
             {
