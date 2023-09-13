@@ -1,15 +1,39 @@
 ﻿namespace ATB.Entities
 {
-    internal class Booking
+    public class Booking
     {
-        public Flight flight { get; set; }
-        public Passenger passenger { get; set; }
-        public Booking(Flight? _flight, Passenger? _passenger )
+        public Passenger Passenger { get; set; }
+        public Flight Flight { get; set; }
+        public FlightClass FClass { get; set; }
+        public  DateTime ReservationDate { get; set; }
+        public Booking(Flight flight, Passenger passenger, FlightClass fClass)
         {
-            flight = _flight ?? throw new ArgumentNullException( nameof( _flight ) );
-            passenger = _passenger ?? throw new ArgumentNullException(nameof(_passenger));
+            Flight = flight;
+            Passenger = passenger;
+            FClass = fClass;
         }
 
+        public override string ToString()
+        {
+            return $"Passenger: {Passenger}\nFlight: {Flight} with Class {FClass} \n At: {ReservationDate}";
+        }
+        public override bool Equals(object? obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+            if (obj is not Booking)
+            {
+                return false;
+            }
+            return Flight.Equals( ((Booking)obj ).Flight ) &&
+                Passenger.Equals( ((Booking)obj ).Passenger );
+        }
 
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
