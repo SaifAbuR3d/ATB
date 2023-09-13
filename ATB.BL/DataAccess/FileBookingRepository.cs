@@ -8,23 +8,15 @@ namespace ATB.DataAccess
         private string bookingsFilePath = "files/Bookings.txt";
         public void AddBooking(Booking booking)
         {
-            try
-            {
-                var bookingLine = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}";
-                File.AppendAllLines(bookingsFilePath, new[] { bookingLine });
-                Console.WriteLine("Booking added successfully!");
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"An error occurred while adding the booking: {ex.Message}");
-            }
+            var bookingLine = $"{booking.Passenger.PassengerId},{booking.Flight.FlightId},{booking.FClass}";
+            File.AppendAllLines(bookingsFilePath, new[] { bookingLine });
+            Console.WriteLine("Booking added successfully!");
         }
+
         public void AddBooking(Passenger passenger, Flight flight, FlightClass flightClass)
         {
             AddBooking(new Booking(flight, passenger, flightClass));
         }
-
-
 
         public IEnumerable<Booking> GetAllBookings()
         {
@@ -34,29 +26,21 @@ namespace ATB.DataAccess
             IPassengerRepository passengerRepository = new FilePassengerRepository();
 
             var allBookings = new List<Booking>();
+            string[] lines = File.ReadAllLines(bookingsFilePath);
 
-            try
+            foreach (string line in lines)
             {
-                string[] lines = File.ReadAllLines(bookingsFilePath);
-                  
-                foreach (string line in lines)
+                string[] values = line.Split(',');
+
+                if (values.Length >= 3 && int.TryParse(values[0], out int passengerId))
                 {
-                    string[] values = line.Split(',');
+                    var flightId = int.Parse(values[1]);
+                    var passenger = passengerRepository.GetPassenger(passengerId);
+                    var flightClass = Enum.Parse<FlightClass>(values[2], true); // true to ignore case
+                    var flight = flightService.GetFlight(flightId, flightClass);
 
-                    if (values.Length >= 3 && int.TryParse(values[0], out int passengerId))
-                    {
-                        var flightId = int.Parse(values[1]);
-                        var passenger = passengerRepository.GetPassenger(passengerId);
-                        var flightClass = Enum.Parse<FlightClass>(values[2], true); // true to ignore case
-                        var flight = flightService.GetFlight(flightId, flightClass);
-                        
-                        allBookings.Add(new Booking((Flight)flight, passenger, flightClass));
-                    }
+                    allBookings.Add(new Booking((Flight)flight, passenger, flightClass));
                 }
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"An error occurred while reading the bookings file: {ex.Message}");
             }
 
             return allBookings;

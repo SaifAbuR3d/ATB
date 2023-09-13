@@ -13,7 +13,16 @@ namespace ATB.Services
 
         public IEnumerable<Booking> GetAllBookings()
         {
-            return _bookingRepository.GetAllBookings();
+            try
+            {
+                return _bookingRepository.GetAllBookings();
+
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"An error occurred while getting the bookings: {ex.Message}");
+                return new List<Booking>();
+            }
         }
 
         /// <summary>
@@ -23,7 +32,6 @@ namespace ATB.Services
         /// <returns>
         /// An IEnumerable of <see cref="Booking"/> objects that match the search criteria.
         /// </returns>
-        /// 
         public IEnumerable<Booking> FilterBookings(BookingSearchCriteria bookingSearchCriteria)
         {
             var allBookings = GetAllBookings();
@@ -74,8 +82,16 @@ namespace ATB.Services
         {
             if (!HasAlreadyBookedThisFlight(passenger, flight))
             {
-                _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
-                return BookingOperationStatus.Success;
+                try
+                {
+                    _bookingRepository.AddBooking(new Booking(flight, passenger, flightClass));
+                    return BookingOperationStatus.Success;
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"An error occurred while adding the bookings: {ex.Message}");
+                    return BookingOperationStatus.Failed;
+                }
             }
             return BookingOperationStatus.Failed;
         }
@@ -83,8 +99,16 @@ namespace ATB.Services
         {
             if (HasAlreadyBookedThisFlight(passenger, flight))
             {
-                _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
-                return BookingOperationStatus.Success;
+                try
+                {
+                    _bookingRepository.RemoveBooking(new Booking(flight, passenger, flightClass));
+                    return BookingOperationStatus.Success;
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"An error occurred while removing the bookings: {ex.Message}");
+                    return BookingOperationStatus.Failed;
+                }
             }
             return BookingOperationStatus.Failed;
         }
@@ -92,8 +116,16 @@ namespace ATB.Services
         {
             if (HasAlreadyBookedThisFlight(booking.Passenger, booking.Flight))
             {
-                _bookingRepository.UpdateBookingClass(booking, newFlightClass);
-                return BookingOperationStatus.Success; 
+                try
+                {
+                    _bookingRepository.UpdateBookingClass(booking, newFlightClass);
+                    return BookingOperationStatus.Success;
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"An error occurred while updating the bookings: {ex.Message}");
+                    return BookingOperationStatus.Failed;
+                }
             }
             return BookingOperationStatus.Failed; 
         }
