@@ -23,9 +23,9 @@ namespace ATB.Helpers
                         {
                             Console.WriteLine($"    - {dataTypeAttribute.DataType}");
                         }
-                        else if (validationAttribute is RequiredAttribute)
+                        else if (validationAttribute is RequiredAttribute requiredAttribute)
                         {
-                            Console.WriteLine($"    - Required");
+                            Console.WriteLine($"    - Required: {requiredAttribute.ErrorMessage}");
                         }
                         else if (validationAttribute is RangeAttribute rangeAttribute)
                         {
