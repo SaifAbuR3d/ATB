@@ -56,7 +56,7 @@ internal static class InputFlightDataValidation
     {
 
         var allFlights = new FileFlightRepository().GetAllFlights();
-        var ConsistentFlights = new List<Flight>();
+        var consistentFlights = new List<Flight>();
         foreach (var flightGroup in flightGroups)
         {
             if (allFlights.Any(flight => flight.FlightId == flightGroup.Key))
@@ -69,7 +69,7 @@ internal static class InputFlightDataValidation
             }
             else if (AreFlightsConsistent(flightGroup.Value))
             {
-                ConsistentFlights.AddRange(flightGroup.Value);
+                consistentFlights.AddRange(flightGroup.Value);
             }
             else
             {
@@ -77,12 +77,12 @@ internal static class InputFlightDataValidation
             }
         }
 
-        return ConsistentFlights;
+        return consistentFlights;
     }
 
     private static bool AreFlightsConsistent(List<Flight> flights)
     {
-        // Check if ConsistentFlights have the same data but different FlightClasses
+        // Check if consistentFlights have the same data but different FlightClasses
         var referenceFlight = flights[0];
         if (flights[0].FClass == flights[1].FClass || flights[1].FClass == flights[2].FClass)
         {
